@@ -1,0 +1,581 @@
+!DOCTYPE html
+html lang=ko
+head
+    meta charset=UTF-8
+    meta name=viewport content=width=device-width, initial-scale=1.0
+    title썸네일 생성기title
+    style
+        @font-face {
+            font-family 'NanumSquareNeo';
+            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-aLt.woff2') format('woff2');
+            font-weight 300;
+            font-display swap;
+        }
+        @font-face {
+            font-family 'NanumSquareNeo';
+            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-bRg.woff2') format('woff2');
+            font-weight 400;
+            font-display swap;
+        }
+        @font-face {
+            font-family 'NanumSquareNeo';
+            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-cBd.woff2') format('woff2');
+            font-weight 700;
+            font-display swap;
+        }
+        @font-face {
+            font-family 'NanumSquareNeo';
+            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-dEb.woff2') format('woff2');
+            font-weight 800;
+            font-display swap;
+        }
+        @font-face {
+            font-family 'NanumSquareNeo';
+            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-eHv.woff2') format('woff2');
+            font-weight 900;
+            font-display swap;
+        }
+
+         {
+            margin 0;
+            padding 0;
+            box-sizing border-box;
+        }
+
+        body {
+            font-family 'NanumSquareNeo', sans-serif;
+            background linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding 20px;
+            min-height 100vh;
+            text-align center;
+        }
+
+        .container {
+            max-width 1200px;
+            margin 0 auto;
+            display grid;
+            grid-template-columns 1fr 1fr;
+            gap 30px;
+            align-items start;
+        }
+
+        .panel {
+            background white;
+            padding 30px;
+            border-radius 20px;
+            box-shadow 0 10px 40px rgba(0,0,0,0.1);
+            backdrop-filter blur(10px);
+        }
+
+        h1 {
+            font-size 28px;
+            margin-bottom 30px;
+            font-weight 900;
+            color #333;
+            text-align center;
+            background linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip text;
+            -webkit-text-fill-color transparent;
+            background-clip text;
+        }
+
+        .control-group {
+            margin-bottom 25px;
+            text-align left;
+        }
+
+        label {
+            display block;
+            margin-bottom 10px;
+            font-weight 700;
+            color #555;
+            font-size 15px;
+        }
+
+        textarea {
+            width 100%;
+            padding 15px;
+            border 2px solid #e0e0e0;
+            border-radius 12px;
+            font-family 'NanumSquareNeo', sans-serif;
+            font-size 16px;
+            resize vertical;
+            min-height 120px;
+            transition all 0.3s;
+            text-align center;
+        }
+
+        textareafocus {
+            outline none;
+            border-color #00e676;
+            box-shadow 0 0 0 3px rgba(0,230,118,0.1);
+        }
+
+        input[type=color] {
+            width 60px;
+            height 45px;
+            border 2px solid #e0e0e0;
+            border-radius 10px;
+            cursor pointer;
+        }
+
+        .color-input {
+            width 120px;
+            height 45px;
+            padding 10px;
+            border 2px solid #e0e0e0;
+            border-radius 10px;
+            text-align center;
+            font-family 'Courier New', monospace;
+            font-size 15px;
+            font-weight 700;
+            text-transform uppercase;
+            transition all 0.3s;
+        }
+
+        .color-inputfocus {
+            outline none;
+            border-color #ede02a;
+            box-shadow 0 0 0 3px rgba(237,224,42,0.2);
+        }
+
+        .palette-grid {
+            display grid;
+            grid-template-columns repeat(4, 1fr);
+            gap 12px;
+            margin-top 12px;
+        }
+
+        .palette-btn {
+            width 100%;
+            height 55px;
+            border 3px solid #e0e0e0;
+            border-radius 12px;
+            cursor pointer;
+            transition all 0.3s;
+        }
+
+        .palette-btnhover {
+            transform scale(1.05);
+            border-color #333;
+            box-shadow 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .palette-btnactive {
+            transform scale(0.98);
+        }
+
+        input[type=range] {
+            width 100%;
+            height 8px;
+            background #e0e0e0;
+            border-radius 5px;
+            outline none;
+            -webkit-appearance none;
+        }
+
+        input[type=range]-webkit-slider-thumb {
+            -webkit-appearance none;
+            appearance none;
+            width 22px;
+            height 22px;
+            background #00e676;
+            cursor pointer;
+            border-radius 50%;
+        }
+
+        .range-group {
+            display flex;
+            align-items center;
+            gap 12px;
+        }
+
+        .range-group input {
+            flex 1;
+        }
+
+        .range-value {
+            min-width 60px;
+            text-align right;
+            font-weight 700;
+            color #666;
+            font-size 15px;
+        }
+
+        .color-group {
+            display flex;
+            gap 18px;
+            align-items center;
+            flex-wrap wrap;
+        }
+
+        .color-item {
+            display flex;
+            flex-direction column;
+            align-items center;
+            gap 8px;
+        }
+
+        .color-label {
+            font-size 13px;
+            color #666;
+        }
+
+        .preview-panel {
+            position sticky;
+            top 20px;
+        }
+
+        #preview-canvas {
+            width 100%;
+            border-radius 20px;
+            box-shadow 0 15px 50px rgba(0,0,0,0.2);
+            margin-bottom 25px;
+            border 4px solid #fff;
+        }
+
+        .button-group {
+            display flex;
+            gap 12px;
+        }
+
+        button {
+            flex 1;
+            padding 18px;
+            border none;
+            border-radius 12px;
+            font-family 'NanumSquareNeo', sans-serif;
+            font-size 16px;
+            font-weight 700;
+            cursor pointer;
+            transition all 0.3s;
+        }
+
+        .btn-download {
+            background linear-gradient(135deg, #00e676 0%, #00c853 100%);
+            color #000;
+        }
+
+        .btn-downloadhover {
+            background linear-gradient(135deg, #00c853 0%, #00a843 100%);
+            transform translateY(-3px);
+            box-shadow 0 10px 30px rgba(0,230,118,0.4);
+        }
+
+        .btn-reset {
+            background linear-gradient(135deg, #ff5252 0%, #ff1744 100%);
+            color white;
+        }
+
+        .btn-resethover {
+            background linear-gradient(135deg, #ff1744 0%, #d50000 100%);
+            transform translateY(-3px);
+            box-shadow 0 10px 30px rgba(255,82,82,0.4);
+        }
+
+        .alt-tag {
+            margin-top 20px;
+            padding 20px;
+            background linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius 12px;
+            border-left 5px solid #00e676;
+        }
+
+        .alt-tag-label {
+            font-size 13px;
+            color #666;
+            margin-bottom 10px;
+            font-weight 700;
+        }
+
+        .alt-tag-text {
+            font-size 15px;
+            color #333;
+            word-break break-all;
+            line-height 1.6;
+            text-align left;
+            background rgba(255,255,255,0.7);
+            padding 12px;
+            border-radius 8px;
+        }
+
+        @media (max-width 968px) {
+            .container {
+                grid-template-columns 1fr;
+                gap 20px;
+            }
+            .preview-panel {
+                position static;
+            }
+        }
+    style
+head
+body
+    div class=container
+        div class=panel
+            h1📝 썸네일 설정h1
+            
+            div class=control-group
+                label썸네일 문구 (엔터로 줄바꿈)label
+                textarea id=text-input placeholder=10 PSN 10 !10PSN 카드 오류 끝! 지금 끝냄textarea
+            div
+
+            div class=control-group
+                label색상 설정label
+                div class=color-group
+                    div class=color-item
+                        input type=text id=bg-color value=#000000 class=color-input maxlength=7
+                        span class=color-label배경색span
+                    div
+                    div class=color-item
+                        input type=text id=text-color value=#ede02a class=color-input maxlength=7
+                        span class=color-label글씨색span
+                    div
+                    div class=color-item
+                        input type=text id=border-color value=#ede02a class=color-input maxlength=7
+                        span class=color-label테두리색span
+                    div
+                div
+                div class=palette-grid
+                    button class=palette-btn data-color=#ede02a style=background #ede02a; title=노랑button
+                    button class=palette-btn data-color=#00e676 style=background #00e676; title=초록button
+                    button class=palette-btn data-color=#ff1744 style=background #ff1744; title=빨강button
+                    button class=palette-btn data-color=#ff9100 style=background #ff9100; title=주황button
+                    button class=palette-btn data-color=#00e5ff style=background #00e5ff; title=청록button
+                    button class=palette-btn data-color=#e040fb style=background #e040fb; title=보라button
+                    button class=palette-btn data-color=#76ff03 style=background #76ff03; title=라임button
+                    button class=palette-btn data-color=#ff4081 style=background #ff4081; title=분홍button
+                div
+            div
+
+            div class=control-group
+                label폰트 크기label
+                div class=range-group
+                    input type=range id=font-size min=30 max=150 value=100
+                    span class=range-value id=font-size-value100pxspan
+                div
+            div
+
+            div class=control-group
+                label폰트 굵기label
+                div class=range-group
+                    input type=range id=font-weight min=300 max=900 step=100 value=900
+                    span class=range-value id=font-weight-value900span
+                div
+            div
+
+            div class=control-group
+                label줄 간격label
+                div class=range-group
+                    input type=range id=line-height min=0.8 max=2 step=0.1 value=1.5
+                    span class=range-value id=line-height-value1.5span
+                div
+            div
+
+            div class=control-group
+                label테두리 두께label
+                div class=range-group
+                    input type=range id=border-width min=0 max=30 value=15
+                    span class=range-value id=border-width-value15pxspan
+                div
+            div
+
+            div class=button-group
+                button class=btn-reset onclick=resetSettings()초기화button
+            div
+        div
+
+        div class=panel preview-panel
+            h1🖼️ 미리보기h1
+            canvas id=preview-canvas width=800 height=800canvas
+            div class=button-group
+                button class=btn-download onclick=downloadThumbnail()다운로드 (WebP)button
+            div
+            div class=alt-tag
+                div class=alt-tag-label생성된 ALT 태그div
+                div class=alt-tag-text id=alt-tag-text썸네일 이미지div
+            div
+        div
+    div
+
+    script
+        const canvas = document.getElementById('preview-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        const textInput = document.getElementById('text-input');
+        const bgColor = document.getElementById('bg-color');
+        const textColor = document.getElementById('text-color');
+        const borderColor = document.getElementById('border-color');
+        const fontSize = document.getElementById('font-size');
+        const fontWeight = document.getElementById('font-weight');
+        const lineHeight = document.getElementById('line-height');
+        const borderWidth = document.getElementById('border-width');
+        
+        const fontSizeValue = document.getElementById('font-size-value');
+        const fontWeightValue = document.getElementById('font-weight-value');
+        const lineHeightValue = document.getElementById('line-height-value');
+        const borderWidthValue = document.getElementById('border-width-value');
+        const altTagText = document.getElementById('alt-tag-text');
+
+        document.fonts.ready.then(() = {
+            bgColor.dataset.lastValid = bgColor.value;
+            textColor.dataset.lastValid = textColor.value;
+            borderColor.dataset.lastValid = borderColor.value;
+            updatePreview();
+        });
+
+        textInput.addEventListener('input', updatePreview);
+        bgColor.addEventListener('input', (e) = validateAndUpdateColor(e.target));
+        textColor.addEventListener('input', (e) = validateAndUpdateColor(e.target));
+        borderColor.addEventListener('input', (e) = validateAndUpdateColor(e.target));
+
+        fontSize.addEventListener('input', (e) = {
+            fontSizeValue.textContent = e.target.value + 'px';
+            updatePreview();
+        });
+        fontWeight.addEventListener('input', (e) = {
+            fontWeightValue.textContent = e.target.value;
+            updatePreview();
+        });
+        lineHeight.addEventListener('input', (e) = {
+            lineHeightValue.textContent = e.target.value;
+            updatePreview();
+        });
+        borderWidth.addEventListener('input', (e) = {
+            borderWidthValue.textContent = e.target.value + 'px';
+            updatePreview();
+        });
+
+        let activeColorInput = null;
+        document.querySelectorAll('.palette-btn').forEach(btn = {
+            btn.addEventListener('click', (e) = {
+                const color = e.target.dataset.color;
+                textColor.value = color;
+                borderColor.value = color;
+                updatePreview();
+            });
+        });
+
+        [bgColor, textColor, borderColor].forEach(input = {
+            input.addEventListener('focus', (e) = {
+                activeColorInput = e.target;
+            });
+        });
+
+        function validateAndUpdateColor(input) {
+            let value = input.value.trim();
+            if (!value.startsWith('#')) {
+                value = '#' + value;
+            }
+            const hexRegex = ^#([0-9A-Fa-f]{6}[0-9A-Fa-f]{3})$;
+            if (hexRegex.test(value)) {
+                input.value = value.toLowerCase();
+                input.dataset.lastValid = input.value;
+                updatePreview();
+            } else if (value.length = 7) {
+                input.value = input.dataset.lastValid  '#000000';
+                if (hexRegex.test(input.value)) {
+                    input.dataset.lastValid = input.value;
+                }
+            }
+        }
+
+        function updatePreview() {
+            const text = textInput.value;
+            const lines = text.split('n');
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+             배경
+            ctx.fillStyle = bgColor.value;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+             테두리
+            const bw = parseInt(borderWidth.value);
+            if (bw  0) {
+                ctx.strokeStyle = borderColor.value;
+                ctx.lineWidth = bw;
+                ctx.strokeRect(bw2, bw2, canvas.width - bw, canvas.height - bw);
+            }
+
+             텍스트
+            const fs = parseInt(fontSize.value);
+            const fw = fontWeight.value;
+            const lh = parseFloat(lineHeight.value);
+            
+            ctx.font = `${fw} ${fs}px 'NanumSquareNeo', sans-serif`;
+            ctx.fillStyle = textColor.value;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+
+            const totalHeight = lines.length  fs  lh;
+            const startY = (canvas.height - totalHeight)  2 + fs  lh  2;
+
+            lines.forEach((line, index) = {
+                const y = startY + index  fs  lh;
+                ctx.fillText(line, canvas.width  2, y);
+            });
+
+            updateAltTag(text);
+        }
+
+        function updateAltTag(text) {
+            const cleanText = text.replace([nr]g, ' ').replace([]g, '').trim();
+            if (cleanText) {
+                const altTag = `썸네일 이미지 - ${cleanText}`;
+                altTagText.textContent = altTag;
+            } else {
+                altTagText.textContent = '썸네일 이미지';
+            }
+        }
+
+        function generateFileName(text) {
+            let fileName = text.replace([nr]g, ' - ').replace([^ws-]g, '');
+            fileName = fileName.replace([-s]+g, '-');
+            fileName = fileName.replace(^-+-+$g, '');
+            if (fileName.length  50) fileName = fileName.substring(0, 50);
+            if (!fileName) fileName = 'thumbnail';
+            return fileName + '.webp';
+        }
+
+        function downloadThumbnail() {
+            canvas.toBlob((blob) = {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                const fileName = generateFileName(textInput.value);
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 'imagewebp', 0.95);
+        }
+
+        function resetSettings() {
+            textInput.value = 'PSN !';
+            bgColor.value = '#000000';
+            textColor.value = '#ede02a';
+            borderColor.value = '#ede02a';
+            fontSize.value = '100';
+            fontWeight.value = '900';
+            lineHeight.value = '1.5';
+            borderWidth.value = '15';
+            
+            fontSizeValue.textContent = '100px';
+            fontWeightValue.textContent = '900';
+            lineHeightValue.textContent = '1.5';
+            borderWidthValue.textContent = '15px';
+            
+            bgColor.dataset.lastValid = '#000000';
+            textColor.dataset.lastValid = '#ede02a';
+            borderColor.dataset.lastValid = '#ede02a';
+            
+            updatePreview();
+        }
+
+         초기 로드
+        updatePreview();
+    script
+body
+html
