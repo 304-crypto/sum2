@@ -1,581 +1,789 @@
-!DOCTYPE html
-html lang=ko
-head
-    meta charset=UTF-8
-    meta name=viewport content=width=device-width, initial-scale=1.0
-    title썸네일 생성기title
-    style
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 썸네일 메이커 v2</title>
+    <style>
         @font-face {
-            font-family 'NanumSquareNeo';
-            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-aLt.woff2') format('woff2');
-            font-weight 300;
-            font-display swap;
+            font-family: 'NanumSquareNeo';
+            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-aLt.woff2);
+            font-weight: 300;
+            font-display: swap;
         }
         @font-face {
-            font-family 'NanumSquareNeo';
-            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-bRg.woff2') format('woff2');
-            font-weight 400;
-            font-display swap;
+            font-family: 'NanumSquareNeo';
+            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-bRg.woff2);
+            font-weight: 400;
+            font-display: swap;
         }
         @font-face {
-            font-family 'NanumSquareNeo';
-            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-cBd.woff2') format('woff2');
-            font-weight 700;
-            font-display swap;
+            font-family: 'NanumSquareNeo';
+            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-cBd.woff2);
+            font-weight: 700;
+            font-display: swap;
         }
         @font-face {
-            font-family 'NanumSquareNeo';
-            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-dEb.woff2') format('woff2');
-            font-weight 800;
-            font-display swap;
+            font-family: 'NanumSquareNeo';
+            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-dEb.woff2);
+            font-weight: 800;
+            font-display: swap;
         }
         @font-face {
-            font-family 'NanumSquareNeo';
-            src url('httpshangeul.pstatic.nethangeul_staticwebfontNanumSquareNeoNanumSquareNeoTTF-eHv.woff2') format('woff2');
-            font-weight 900;
-            font-display swap;
+            font-family: 'NanumSquareNeo';
+            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-eHv.woff2);
+            font-weight: 900;
+            font-display: swap;
         }
 
-         {
-            margin 0;
-            padding 0;
-            box-sizing border-box;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
-            font-family 'NanumSquareNeo', sans-serif;
-            background linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            padding 20px;
-            min-height 100vh;
-            text-align center;
+            font-family: 'NanumSquareNeo', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width 1200px;
-            margin 0 auto;
-            display grid;
-            grid-template-columns 1fr 1fr;
-            gap 30px;
-            align-items start;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
         }
 
         .panel {
-            background white;
-            padding 30px;
-            border-radius 20px;
-            box-shadow 0 10px 40px rgba(0,0,0,0.1);
-            backdrop-filter blur(10px);
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         h1 {
-            font-size 28px;
-            margin-bottom 30px;
-            font-weight 900;
-            color #333;
-            text-align center;
-            background linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip text;
-            -webkit-text-fill-color transparent;
-            background-clip text;
+            font-size: 24px;
+            margin-bottom: 30px;
+            font-weight: 900;
+            color: #333;
         }
 
         .control-group {
-            margin-bottom 25px;
-            text-align left;
+            margin-bottom: 20px;
         }
 
         label {
-            display block;
-            margin-bottom 10px;
-            font-weight 700;
-            color #555;
-            font-size 15px;
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+            font-size: 14px;
         }
 
         textarea {
-            width 100%;
-            padding 15px;
-            border 2px solid #e0e0e0;
-            border-radius 12px;
-            font-family 'NanumSquareNeo', sans-serif;
-            font-size 16px;
-            resize vertical;
-            min-height 120px;
-            transition all 0.3s;
-            text-align center;
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'NanumSquareNeo', sans-serif;
+            font-size: 16px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.3s;
         }
 
-        textareafocus {
-            outline none;
-            border-color #00e676;
-            box-shadow 0 0 0 3px rgba(0,230,118,0.1);
+        textarea:focus {
+            outline: none;
+            border-color: #00e676;
         }
 
-        input[type=color] {
-            width 60px;
-            height 45px;
-            border 2px solid #e0e0e0;
-            border-radius 10px;
-            cursor pointer;
+        input[type="color"] {
+            width: 46px;
+            height: 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            padding: 0;
+            background: transparent;
         }
 
         .color-input {
-            width 120px;
-            height 45px;
-            padding 10px;
-            border 2px solid #e0e0e0;
-            border-radius 10px;
-            text-align center;
-            font-family 'Courier New', monospace;
-            font-size 15px;
-            font-weight 700;
-            text-transform uppercase;
-            transition all 0.3s;
+            width: 105px;
+            height: 40px;
+            padding: 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: border-color 0.3s;
         }
 
-        .color-inputfocus {
-            outline none;
-            border-color #ede02a;
-            box-shadow 0 0 0 3px rgba(237,224,42,0.2);
+        .color-input:focus {
+            outline: none;
+            border-color: #ede02a;
         }
 
         .palette-grid {
-            display grid;
-            grid-template-columns repeat(4, 1fr);
-            gap 12px;
-            margin-top 12px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 10px;
         }
 
         .palette-btn {
-            width 100%;
-            height 55px;
-            border 3px solid #e0e0e0;
-            border-radius 12px;
-            cursor pointer;
-            transition all 0.3s;
+            width: 100%;
+            height: 50px;
+            border: 3px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .palette-btnhover {
-            transform scale(1.05);
-            border-color #333;
-            box-shadow 0 8px 25px rgba(0,0,0,0.2);
+        .palette-btn:hover {
+            transform: scale(1.05);
+            border-color: #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .palette-btnactive {
-            transform scale(0.98);
+        .palette-btn:active {
+            transform: scale(0.95);
         }
 
-        input[type=range] {
-            width 100%;
-            height 8px;
-            background #e0e0e0;
-            border-radius 5px;
-            outline none;
-            -webkit-appearance none;
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            outline: none;
         }
 
-        input[type=range]-webkit-slider-thumb {
-            -webkit-appearance none;
-            appearance none;
-            width 22px;
-            height 22px;
-            background #00e676;
-            cursor pointer;
-            border-radius 50%;
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #00e676;
+            cursor: pointer;
+            border-radius: 50%;
         }
 
         .range-group {
-            display flex;
-            align-items center;
-            gap 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .range-group input {
-            flex 1;
+            flex: 1;
         }
 
         .range-value {
-            min-width 60px;
-            text-align right;
-            font-weight 700;
-            color #666;
-            font-size 15px;
+            min-width: 50px;
+            text-align: right;
+            font-weight: 700;
+            color: #666;
         }
 
         .color-group {
-            display flex;
-            gap 18px;
-            align-items center;
-            flex-wrap wrap;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         .color-item {
-            display flex;
-            flex-direction column;
-            align-items center;
-            gap 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .color-label {
-            font-size 13px;
-            color #666;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .select {
+            width: 100%;
+            height: 44px;
+            padding: 10px 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: 'NanumSquareNeo', sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            color: #333;
+            background: white;
+            cursor: pointer;
+        }
+
+        .select:focus {
+            outline: none;
+            border-color: #00e676;
+        }
+
+        .align-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
         }
 
         .preview-panel {
-            position sticky;
-            top 20px;
+            position: sticky;
+            top: 20px;
         }
 
         #preview-canvas {
-            width 100%;
-            border-radius 20px;
-            box-shadow 0 15px 50px rgba(0,0,0,0.2);
-            margin-bottom 25px;
-            border 4px solid #fff;
+            width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
         }
 
         .button-group {
-            display flex;
-            gap 12px;
+            display: flex;
+            gap: 10px;
         }
 
         button {
-            flex 1;
-            padding 18px;
-            border none;
-            border-radius 12px;
-            font-family 'NanumSquareNeo', sans-serif;
-            font-size 16px;
-            font-weight 700;
-            cursor pointer;
-            transition all 0.3s;
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'NanumSquareNeo', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
         }
 
         .btn-download {
-            background linear-gradient(135deg, #00e676 0%, #00c853 100%);
-            color #000;
+            background: #00e676;
+            color: #000;
         }
 
-        .btn-downloadhover {
-            background linear-gradient(135deg, #00c853 0%, #00a843 100%);
-            transform translateY(-3px);
-            box-shadow 0 10px 30px rgba(0,230,118,0.4);
+        .btn-download:hover {
+            background: #00c853;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,230,118,0.3);
         }
 
         .btn-reset {
-            background linear-gradient(135deg, #ff5252 0%, #ff1744 100%);
-            color white;
+            background: #ff5252;
+            color: white;
         }
 
-        .btn-resethover {
-            background linear-gradient(135deg, #ff1744 0%, #d50000 100%);
-            transform translateY(-3px);
-            box-shadow 0 10px 30px rgba(255,82,82,0.4);
+        .btn-reset:hover {
+            background: #ff1744;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255,82,82,0.3);
         }
 
         .alt-tag {
-            margin-top 20px;
-            padding 20px;
-            background linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            border-radius 12px;
-            border-left 5px solid #00e676;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            border-left: 4px solid #00e676;
         }
 
         .alt-tag-label {
-            font-size 13px;
-            color #666;
-            margin-bottom 10px;
-            font-weight 700;
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 700;
         }
 
         .alt-tag-text {
-            font-size 15px;
-            color #333;
-            word-break break-all;
-            line-height 1.6;
-            text-align left;
-            background rgba(255,255,255,0.7);
-            padding 12px;
-            border-radius 8px;
+            font-size: 14px;
+            color: #333;
+            word-break: break-all;
+            line-height: 1.5;
         }
 
-        @media (max-width 968px) {
+        @media (max-width: 968px) {
             .container {
-                grid-template-columns 1fr;
-                gap 20px;
+                grid-template-columns: 1fr;
             }
+
             .preview-panel {
-                position static;
+                position: static;
+            }
+
+            .align-grid {
+                grid-template-columns: 1fr;
             }
         }
-    style
-head
-body
-    div class=container
-        div class=panel
-            h1📝 썸네일 설정h1
-            
-            div class=control-group
-                label썸네일 문구 (엔터로 줄바꿈)label
-                textarea id=text-input placeholder=10 PSN 10 !10PSN 카드 오류 끝! 지금 끝냄textarea
-            div
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="panel">
+            <h1>📝 썸네일 설정</h1>
 
-            div class=control-group
-                label색상 설정label
-                div class=color-group
-                    div class=color-item
-                        input type=text id=bg-color value=#000000 class=color-input maxlength=7
-                        span class=color-label배경색span
-                    div
-                    div class=color-item
-                        input type=text id=text-color value=#ede02a class=color-input maxlength=7
-                        span class=color-label글씨색span
-                    div
-                    div class=color-item
-                        input type=text id=border-color value=#ede02a class=color-input maxlength=7
-                        span class=color-label테두리색span
-                    div
-                div
-                div class=palette-grid
-                    button class=palette-btn data-color=#ede02a style=background #ede02a; title=노랑button
-                    button class=palette-btn data-color=#00e676 style=background #00e676; title=초록button
-                    button class=palette-btn data-color=#ff1744 style=background #ff1744; title=빨강button
-                    button class=palette-btn data-color=#ff9100 style=background #ff9100; title=주황button
-                    button class=palette-btn data-color=#00e5ff style=background #00e5ff; title=청록button
-                    button class=palette-btn data-color=#e040fb style=background #e040fb; title=보라button
-                    button class=palette-btn data-color=#76ff03 style=background #76ff03; title=라임button
-                    button class=palette-btn data-color=#ff4081 style=background #ff4081; title=분홍button
-                div
-            div
+            <div class="control-group">
+                <label>썸네일 문구 (엔터로 줄바꿈)</label>
+                <textarea id="text-input" placeholder="썸네일 문구를 입력하세요&#10;엔터키로 줄바꿈 가능">PSN 카드&#10;오류 끝!&#10;지금 끝냄</textarea>
+            </div>
 
-            div class=control-group
-                label폰트 크기label
-                div class=range-group
-                    input type=range id=font-size min=30 max=150 value=100
-                    span class=range-value id=font-size-value100pxspan
-                div
-            div
+            <div class="control-group">
+                <label>색상 설정 (피커 + HEX)</label>
+                <div class="color-group">
+                    <div class="color-item">
+                        <div class="color-row">
+                            <input type="color" id="bg-color-picker" value="#000000">
+                            <input type="text" id="bg-color" value="#000000" class="color-input" maxlength="7">
+                        </div>
+                        <span class="color-label">배경색</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-row">
+                            <input type="color" id="text-color-picker" value="#ede02a">
+                            <input type="text" id="text-color" value="#ede02a" class="color-input" maxlength="7">
+                        </div>
+                        <span class="color-label">글씨색</span>
+                    </div>
+                    <div class="color-item">
+                        <div class="color-row">
+                            <input type="color" id="border-color-picker" value="#ede02a">
+                            <input type="text" id="border-color" value="#ede02a" class="color-input" maxlength="7">
+                        </div>
+                        <span class="color-label">테두리색</span>
+                    </div>
+                </div>
+            </div>
 
-            div class=control-group
-                label폰트 굵기label
-                div class=range-group
-                    input type=range id=font-weight min=300 max=900 step=100 value=900
-                    span class=range-value id=font-weight-value900span
-                div
-            div
+            <div class="control-group">
+                <label>형광 컬러 팔레트 (선택한 항목에 적용)</label>
+                <div class="palette-grid">
+                    <button class="palette-btn" data-color="#ede02a" style="background: #ede02a;" title="형광 노랑"></button>
+                    <button class="palette-btn" data-color="#00e676" style="background: #00e676;" title="형광 초록"></button>
+                    <button class="palette-btn" data-color="#ff1744" style="background: #ff1744;" title="형광 빨강"></button>
+                    <button class="palette-btn" data-color="#ff9100" style="background: #ff9100;" title="형광 주황"></button>
+                    <button class="palette-btn" data-color="#00e5ff" style="background: #00e5ff;" title="형광 하늘"></button>
+                    <button class="palette-btn" data-color="#e040fb" style="background: #e040fb;" title="형광 보라"></button>
+                    <button class="palette-btn" data-color="#76ff03" style="background: #76ff03;" title="형광 라임"></button>
+                    <button class="palette-btn" data-color="#ff4081" style="background: #ff4081;" title="형광 핑크"></button>
+                </div>
+            </div>
 
-            div class=control-group
-                label줄 간격label
-                div class=range-group
-                    input type=range id=line-height min=0.8 max=2 step=0.1 value=1.5
-                    span class=range-value id=line-height-value1.5span
-                div
-            div
+            <div class="control-group">
+                <label>문자 정렬</label>
+                <div class="align-grid">
+                    <div>
+                        <label style="margin-bottom:6px;">가로 정렬</label>
+                        <select id="text-align" class="select">
+                            <option value="center" selected>가운데</option>
+                            <option value="left">왼쪽</option>
+                            <option value="right">오른쪽</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="margin-bottom:6px;">세로 정렬</label>
+                        <select id="vertical-align" class="select">
+                            <option value="middle" selected>가운데</option>
+                            <option value="top">위</option>
+                            <option value="bottom">아래</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-            div class=control-group
-                label테두리 두께label
-                div class=range-group
-                    input type=range id=border-width min=0 max=30 value=15
-                    span class=range-value id=border-width-value15pxspan
-                div
-            div
+            <div class="control-group">
+                <label>텍스트 여백 (정렬용)</label>
+                <div class="range-group">
+                    <input type="range" id="text-padding" min="0" max="200" value="60">
+                    <span class="range-value" id="text-padding-value">60px</span>
+                </div>
+            </div>
 
-            div class=button-group
-                button class=btn-reset onclick=resetSettings()초기화button
-            div
-        div
+            <div class="control-group">
+                <label>폰트 크기</label>
+                <div class="range-group">
+                    <input type="range" id="font-size" min="30" max="150" value="100">
+                    <span class="range-value" id="font-size-value">100px</span>
+                </div>
+            </div>
 
-        div class=panel preview-panel
-            h1🖼️ 미리보기h1
-            canvas id=preview-canvas width=800 height=800canvas
-            div class=button-group
-                button class=btn-download onclick=downloadThumbnail()다운로드 (WebP)button
-            div
-            div class=alt-tag
-                div class=alt-tag-label생성된 ALT 태그div
-                div class=alt-tag-text id=alt-tag-text썸네일 이미지div
-            div
-        div
-    div
+            <div class="control-group">
+                <label>폰트 굵기</label>
+                <div class="range-group">
+                    <input type="range" id="font-weight" min="300" max="900" step="100" value="900">
+                    <span class="range-value" id="font-weight-value">900</span>
+                </div>
+            </div>
 
-    script
+            <div class="control-group">
+                <label>줄 간격</label>
+                <div class="range-group">
+                    <input type="range" id="line-height" min="0.8" max="2" step="0.1" value="1.5">
+                    <span class="range-value" id="line-height-value">1.5</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>테두리 두께</label>
+                <div class="range-group">
+                    <input type="range" id="border-width" min="0" max="30" value="15">
+                    <span class="range-value" id="border-width-value">15px</span>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-reset" onclick="resetSettings()">초기화</button>
+            </div>
+        </div>
+
+        <div class="panel preview-panel">
+            <h1>🖼️ 미리보기</h1>
+            <canvas id="preview-canvas" width="800" height="800"></canvas>
+
+            <div class="button-group">
+                <button class="btn-download" onclick="downloadThumbnail()">다운로드 (WebP)</button>
+            </div>
+
+            <div class="alt-tag">
+                <div class="alt-tag-label">생성된 ALT 태그:</div>
+                <div class="alt-tag-text" id="alt-tag-text">썸네일 이미지</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
         const canvas = document.getElementById('preview-canvas');
         const ctx = canvas.getContext('2d');
-        
+
+        // 컨트롤 요소들
         const textInput = document.getElementById('text-input');
+
+        // HEX inputs
         const bgColor = document.getElementById('bg-color');
         const textColor = document.getElementById('text-color');
         const borderColor = document.getElementById('border-color');
+
+        // Color pickers
+        const bgColorPicker = document.getElementById('bg-color-picker');
+        const textColorPicker = document.getElementById('text-color-picker');
+        const borderColorPicker = document.getElementById('border-color-picker');
+
+        // Align controls
+        const textAlign = document.getElementById('text-align');
+        const verticalAlign = document.getElementById('vertical-align');
+        const textPadding = document.getElementById('text-padding');
+
+        // Sliders
         const fontSize = document.getElementById('font-size');
         const fontWeight = document.getElementById('font-weight');
         const lineHeight = document.getElementById('line-height');
         const borderWidth = document.getElementById('border-width');
-        
+
+        // 값 표시 요소들
         const fontSizeValue = document.getElementById('font-size-value');
         const fontWeightValue = document.getElementById('font-weight-value');
         const lineHeightValue = document.getElementById('line-height-value');
         const borderWidthValue = document.getElementById('border-width-value');
+        const textPaddingValue = document.getElementById('text-padding-value');
         const altTagText = document.getElementById('alt-tag-text');
 
-        document.fonts.ready.then(() = {
-            bgColor.dataset.lastValid = bgColor.value;
-            textColor.dataset.lastValid = textColor.value;
-            borderColor.dataset.lastValid = borderColor.value;
+        // 팔레트 적용 대상(마지막으로 포커스한 컬러 항목)
+        let activeColorInput = null;
+
+        // 폰트 로드 대기
+        document.fonts.ready.then(() => {
+            // 초기 유효값 설정
+            initColorState(bgColor, bgColorPicker);
+            initColorState(textColor, textColorPicker);
+            initColorState(borderColor, borderColorPicker);
+
             updatePreview();
         });
 
+        // ---------- 이벤트 ----------
         textInput.addEventListener('input', updatePreview);
-        bgColor.addEventListener('input', (e) = validateAndUpdateColor(e.target));
-        textColor.addEventListener('input', (e) = validateAndUpdateColor(e.target));
-        borderColor.addEventListener('input', (e) = validateAndUpdateColor(e.target));
 
-        fontSize.addEventListener('input', (e) = {
+        // HEX 입력 (직접 타이핑)
+        bgColor.addEventListener('input', () => validateAndSyncColor(bgColor, bgColorPicker));
+        textColor.addEventListener('input', () => validateAndSyncColor(textColor, textColorPicker));
+        borderColor.addEventListener('input', () => validateAndSyncColor(borderColor, borderColorPicker));
+
+        // 컬러 피커 변경
+        bgColorPicker.addEventListener('input', () => setColorFromPicker(bgColorPicker, bgColor));
+        textColorPicker.addEventListener('input', () => setColorFromPicker(textColorPicker, textColor));
+        borderColorPicker.addEventListener('input', () => setColorFromPicker(borderColorPicker, borderColor));
+
+        // 팔레트 버튼
+        document.querySelectorAll('.palette-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const color = e.currentTarget.dataset.color;
+
+                // 포커스한 항목이 있으면 거기에만 적용
+                if (activeColorInput) {
+                    applyColorToInput(activeColorInput, color);
+                    return;
+                }
+
+                // 기본값: 글씨/테두리 같이 변경
+                applyColorToInput(textColor, color);
+                applyColorToInput(borderColor, color);
+            });
+        });
+
+        // 컬러 인풋/피커 포커스 추적
+        const colorFocusables = [
+            bgColor, bgColorPicker,
+            textColor, textColorPicker,
+            borderColor, borderColorPicker
+        ];
+
+        colorFocusables.forEach(el => {
+            el.addEventListener('focus', () => {
+                // activeColorInput은 HEX input으로만 통일해서 관리
+                if (el === bgColorPicker) activeColorInput = bgColor;
+                else if (el === textColorPicker) activeColorInput = textColor;
+                else if (el === borderColorPicker) activeColorInput = borderColor;
+                else activeColorInput = el;
+            });
+        });
+
+        // 정렬/여백
+        textAlign.addEventListener('change', updatePreview);
+        verticalAlign.addEventListener('change', updatePreview);
+        textPadding.addEventListener('input', (e) => {
+            textPaddingValue.textContent = e.target.value + 'px';
+            updatePreview();
+        });
+
+        // 슬라이더들
+        fontSize.addEventListener('input', (e) => {
             fontSizeValue.textContent = e.target.value + 'px';
             updatePreview();
         });
-        fontWeight.addEventListener('input', (e) = {
+
+        fontWeight.addEventListener('input', (e) => {
             fontWeightValue.textContent = e.target.value;
             updatePreview();
         });
-        lineHeight.addEventListener('input', (e) = {
+
+        lineHeight.addEventListener('input', (e) => {
             lineHeightValue.textContent = e.target.value;
             updatePreview();
         });
-        borderWidth.addEventListener('input', (e) = {
+
+        borderWidth.addEventListener('input', (e) => {
             borderWidthValue.textContent = e.target.value + 'px';
             updatePreview();
         });
 
-        let activeColorInput = null;
-        document.querySelectorAll('.palette-btn').forEach(btn = {
-            btn.addEventListener('click', (e) = {
-                const color = e.target.dataset.color;
-                textColor.value = color;
-                borderColor.value = color;
+        // ---------- 컬러 유틸 ----------
+        function initColorState(hexInput, picker) {
+            hexInput.dataset.lastValid = normalizeHex(hexInput.value) || '#000000';
+            hexInput.value = hexInput.dataset.lastValid;
+            if (picker) picker.value = hexInput.value;
+        }
+
+        function normalizeHex(val) {
+            if (!val) return null;
+            let v = String(val).trim();
+            if (!v.startsWith('#')) v = '#' + v;
+            const hexRegex = /^#[0-9A-Fa-f]{6}$/;
+            return hexRegex.test(v) ? v.toLowerCase() : null;
+        }
+
+        function validateAndSyncColor(hexInput, picker) {
+            const normalized = normalizeHex(hexInput.value);
+
+            if (normalized) {
+                hexInput.value = normalized;
+                hexInput.dataset.lastValid = normalized;
+                if (picker) picker.value = normalized;
                 updatePreview();
-            });
-        });
-
-        [bgColor, textColor, borderColor].forEach(input = {
-            input.addEventListener('focus', (e) = {
-                activeColorInput = e.target;
-            });
-        });
-
-        function validateAndUpdateColor(input) {
-            let value = input.value.trim();
-            if (!value.startsWith('#')) {
-                value = '#' + value;
+                return;
             }
-            const hexRegex = ^#([0-9A-Fa-f]{6}[0-9A-Fa-f]{3})$;
-            if (hexRegex.test(value)) {
-                input.value = value.toLowerCase();
-                input.dataset.lastValid = input.value;
-                updatePreview();
-            } else if (value.length = 7) {
-                input.value = input.dataset.lastValid  '#000000';
-                if (hexRegex.test(input.value)) {
-                    input.dataset.lastValid = input.value;
-                }
+
+            // 길이가 7인데 유효하지 않으면 마지막 유효값으로 복구
+            const v = String(hexInput.value).trim();
+            if (v.length >= 6) {
+                const fallback = hexInput.dataset.lastValid || '#000000';
+                hexInput.value = fallback;
+                if (picker) picker.value = fallback;
             }
         }
 
+        function setColorFromPicker(picker, hexInput) {
+            hexInput.value = picker.value.toLowerCase();
+            hexInput.dataset.lastValid = hexInput.value;
+            updatePreview();
+        }
+
+        function applyColorToInput(hexInput, color) {
+            const normalized = normalizeHex(color);
+            if (!normalized) return;
+
+            if (hexInput === bgColor) bgColorPicker.value = normalized;
+            if (hexInput === textColor) textColorPicker.value = normalized;
+            if (hexInput === borderColor) borderColorPicker.value = normalized;
+
+            hexInput.value = normalized;
+            hexInput.dataset.lastValid = normalized;
+            updatePreview();
+        }
+
+        // ---------- 렌더 ----------
         function updatePreview() {
             const text = textInput.value;
-            const lines = text.split('n');
+            const lines = text.split('\n');
 
+            // 캔버스 클리어
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-             배경
+
+            // 배경
             ctx.fillStyle = bgColor.value;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-             테두리
+            // 테두리
             const bw = parseInt(borderWidth.value);
-            if (bw  0) {
+            if (bw > 0) {
                 ctx.strokeStyle = borderColor.value;
                 ctx.lineWidth = bw;
-                ctx.strokeRect(bw2, bw2, canvas.width - bw, canvas.height - bw);
+                ctx.strokeRect(bw / 2, bw / 2, canvas.width - bw, canvas.height - bw);
             }
 
-             텍스트
+            // 텍스트 설정
             const fs = parseInt(fontSize.value);
             const fw = fontWeight.value;
             const lh = parseFloat(lineHeight.value);
-            
+            const pad = parseInt(textPadding.value);
+
             ctx.font = `${fw} ${fs}px 'NanumSquareNeo', sans-serif`;
             ctx.fillStyle = textColor.value;
-            ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
 
-            const totalHeight = lines.length  fs  lh;
-            const startY = (canvas.height - totalHeight)  2 + fs  lh  2;
+            // 가로 정렬
+            let x = canvas.width / 2;
+            const hAlign = textAlign.value;
 
-            lines.forEach((line, index) = {
-                const y = startY + index  fs  lh;
-                ctx.fillText(line, canvas.width  2, y);
+            if (hAlign === 'left') {
+                ctx.textAlign = 'left';
+                x = pad + bw;
+            } else if (hAlign === 'right') {
+                ctx.textAlign = 'right';
+                x = canvas.width - pad - bw;
+            } else {
+                ctx.textAlign = 'center';
+                x = canvas.width / 2;
+            }
+
+            // 세로 정렬
+            const totalHeight = lines.length * fs * lh;
+            const lineStep = fs * lh;
+
+            let startY;
+            const vAlign = verticalAlign.value;
+
+            if (vAlign === 'top') {
+                startY = pad + bw + (lineStep / 2);
+            } else if (vAlign === 'bottom') {
+                startY = (canvas.height - pad - bw - totalHeight) + (lineStep / 2);
+            } else {
+                // middle
+                startY = (canvas.height - totalHeight) / 2 + (lineStep / 2);
+            }
+
+            // 텍스트 그리기
+            lines.forEach((line, index) => {
+                const y = startY + (index * lineStep);
+                ctx.fillText(line, x, y);
             });
 
+            // ALT 태그 생성
             updateAltTag(text);
         }
 
         function updateAltTag(text) {
-            const cleanText = text.replace([nr]g, ' ').replace([]g, '').trim();
+            // 줄바꿈을 공백으로 변경하고 중복 공백 제거
+            const cleanText = text.replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+
             if (cleanText) {
-                const altTag = `썸네일 이미지 - ${cleanText}`;
+                const altTag = `${cleanText} - 블로그 썸네일 이미지 | 시선을 사로잡는 비주얼 콘텐츠`;
                 altTagText.textContent = altTag;
             } else {
-                altTagText.textContent = '썸네일 이미지';
+                altTagText.textContent = '맞춤형 블로그 썸네일 이미지 | 고품질 비주얼 콘텐츠';
             }
         }
 
         function generateFileName(text) {
-            let fileName = text.replace([nr]g, ' - ').replace([^ws-]g, '');
-            fileName = fileName.replace([-s]+g, '-');
-            fileName = fileName.replace(^-+-+$g, '');
-            if (fileName.length  50) fileName = fileName.substring(0, 50);
-            if (!fileName) fileName = 'thumbnail';
+            let fileName = text.replace(/\n/g, '-');
+            fileName = fileName.replace(/[^\w\sㄱ-ㅎㅏ-ㅣ가-힣-]/g, '');
+            fileName = fileName.replace(/[\s-]+/g, '-');
+            fileName = fileName.replace(/^-+|-+$/g, '');
+
+            if (fileName.length > 50) {
+                fileName = fileName.substring(0, 50);
+            }
+
+            if (!fileName) {
+                fileName = 'thumbnail';
+            }
+
             return fileName + '.webp';
         }
 
         function downloadThumbnail() {
-            canvas.toBlob((blob) = {
+            canvas.toBlob((blob) => {
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 const fileName = generateFileName(textInput.value);
+
                 a.href = url;
                 a.download = fileName;
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
-            }, 'imagewebp', 0.95);
+            }, 'image/webp', 0.95);
         }
 
         function resetSettings() {
-            textInput.value = 'PSN !';
-            bgColor.value = '#000000';
-            textColor.value = '#ede02a';
-            borderColor.value = '#ede02a';
+            textInput.value = 'PSN 카드\n오류 끝!\n지금 끝냄';
+
+            applyColorToInput(bgColor, '#000000');
+            applyColorToInput(textColor, '#ede02a');
+            applyColorToInput(borderColor, '#ede02a');
+
+            textAlign.value = 'center';
+            verticalAlign.value = 'middle';
+            textPadding.value = '60';
+
             fontSize.value = '100';
             fontWeight.value = '900';
             lineHeight.value = '1.5';
             borderWidth.value = '15';
-            
+
             fontSizeValue.textContent = '100px';
             fontWeightValue.textContent = '900';
             lineHeightValue.textContent = '1.5';
             borderWidthValue.textContent = '15px';
-            
-            bgColor.dataset.lastValid = '#000000';
-            textColor.dataset.lastValid = '#ede02a';
-            borderColor.dataset.lastValid = '#ede02a';
-            
+            textPaddingValue.textContent = '60px';
+
+            activeColorInput = null;
             updatePreview();
         }
 
-         초기 로드
+        // 초기 렌더링 (폰트 로딩 전이라도 빠르게 한번)
         updatePreview();
-    script
-body
-html
+    </script>
+</body>
+</html>
