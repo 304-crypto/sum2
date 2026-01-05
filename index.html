@@ -4,371 +4,292 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>블로그 썸네일 메이커 PRO</title>
-    <!-- 구글 폰트 및 웹폰트 추가 -->
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Nanum+Myeongjo:wght@700;800&family=Noto+Sans+KR:wght@100;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@900&display=swap" rel="stylesheet">
     <style>
-        /* 기존 나눔스퀘어 네오 */
-        @font-face {
-            font-family: 'NanumSquareNeo';
-            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-aLt.woff2);
-            font-weight: 300; font-display: swap;
-        }
-        @font-face {
-            font-family: 'NanumSquareNeo';
-            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-bRg.woff2);
-            font-weight: 400; font-display: swap;
-        }
+        /* 폰트 설정 */
         @font-face {
             font-family: 'NanumSquareNeo';
             src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-cBd.woff2);
-            font-weight: 700; font-display: swap;
+            font-weight: 700;
         }
-        @font-face {
-            font-family: 'NanumSquareNeo';
-            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-dEb.woff2);
-            font-weight: 800; font-display: swap;
-        }
-        @font-face {
-            font-family: 'NanumSquareNeo';
-            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-eHv.woff2);
-            font-weight: 900; font-display: swap;
-        }
-
-        /* G마켓 산스 (눈누) */
         @font-face {
             font-family: 'GmarketSansBold';
             src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
-            font-weight: normal; font-style: normal;
+        }
+
+        :root {
+            --primary: #00e676;
+            --bg-gray: #f8f9fa;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'NanumSquareNeo', sans-serif; background: #f5f5f5; padding: 20px; min-height: 100vh; }
-        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; align-items: start; }
-        .panel { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { font-size: 24px; margin-bottom: 30px; font-weight: 900; color: #333; }
-        .control-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; color: #555; font-size: 14px; }
-        textarea { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 8px; font-family: inherit; font-size: 16px; resize: vertical; min-height: 100px; transition: border-color 0.3s; }
-        textarea:focus { outline: none; border-color: #00e676; }
-        input[type="color"] { width: 46px; height: 40px; border: 2px solid #e0e0e0; border-radius: 10px; cursor: pointer; padding: 0; background: transparent; }
-        .color-input { width: 105px; height: 40px; padding: 8px; border: 2px solid #e0e0e0; border-radius: 10px; text-align: center; font-family: 'Courier New', monospace; font-size: 14px; font-weight: 700; text-transform: uppercase; }
-        .palette-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-        .palette-btn { width: 100%; height: 50px; border: 3px solid #e0e0e0; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .palette-btn:hover { transform: scale(1.05); border-color: #333; }
-        input[type="range"] { width: 100%; height: 6px; background: #e0e0e0; border-radius: 3px; outline: none; }
-        .range-group { display: flex; align-items: center; gap: 10px; }
-        .range-value { min-width: 50px; text-align: right; font-weight: 700; color: #666; }
-        .color-group { display: flex; gap: 15px; align-items: center; flex-wrap: wrap; }
-        .color-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .color-row { display: flex; align-items: center; gap: 8px; }
-        .select { width: 100%; height: 44px; padding: 10px 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-family: inherit; font-size: 14px; font-weight: 700; color: #333; background: white; cursor: pointer; }
-        .select:focus { outline: none; border-color: #00e676; }
-        .align-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .preview-panel { position: sticky; top: 20px; }
-        #preview-canvas { width: 100%; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-bottom: 20px; }
-        button { flex: 1; padding: 15px; border: none; border-radius: 8px; font-family: inherit; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
-        .btn-download { background: #00e676; color: #000; }
-        .btn-reset { background: #ff5252; color: white; }
-        .alt-tag { margin-top: 15px; padding: 15px; background: #f5f5f5; border-radius: 8px; border-left: 4px solid #00e676; }
-        .alt-tag-label { font-size: 12px; color: #666; margin-bottom: 8px; font-weight: 700; }
-        .alt-tag-text { font-size: 14px; color: #333; word-break: break-all; }
-        @media (max-width: 968px) { .container { grid-template-columns: 1fr; } .preview-panel { position: static; } }
+        body { font-family: 'NanumSquareNeo', sans-serif; background: #eef2f5; padding: 20px; color: #333; }
+
+        .container { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 450px 1fr; gap: 30px; }
+
+        /* 패널 공통 */
+        .panel { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+        h2 { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+        h2 span { font-size: 22px; }
+
+        .control-group { margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 700; color: #444; font-size: 14px; }
+
+        /* 입력 요소 */
+        textarea { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 16px; min-height: 100px; transition: 0.3s; }
+        textarea:focus { outline: none; border-color: var(--primary); }
+
+        .select { width: 100%; height: 45px; padding: 0 10px; border: 2px solid #eee; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+        /* 디자인 프리셋 그리드 */
+        .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; }
+        .preset-item { 
+            border: 2px solid #eee; border-radius: 12px; padding: 10px; cursor: pointer; 
+            transition: 0.2s; text-align: center; position: relative; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; gap: 5px;
+        }
+        .preset-item:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .preset-preview { 
+            width: 100%; height: 60px; border-radius: 6px; display: flex; 
+            align-items: center; justify-content: center; font-size: 14px; font-weight: 900;
+        }
+        .preset-name { font-size: 12px; font-weight: 700; color: #666; }
+
+        /* 컬러 커스텀 */
+        .color-row { display: flex; gap: 10px; margin-top: 10px; }
+        .color-box { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .color-box input[type="color"] { width: 100%; height: 35px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
+        .color-box span { font-size: 11px; font-weight: 700; color: #888; }
+
+        /* 슬라이더 커스텀 */
+        .range-wrapper { display: flex; align-items: center; gap: 10px; }
+        input[type="range"] { flex: 1; height: 6px; border-radius: 3px; accent-color: var(--primary); cursor: pointer; }
+        .range-val { min-width: 45px; font-size: 13px; font-weight: 800; color: var(--primary); text-align: right; }
+
+        /* 미리보기 패널 */
+        .preview-panel { position: sticky; top: 20px; text-align: center; }
+        #preview-canvas { width: 100%; max-width: 600px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin-bottom: 20px; background: #fff; }
+
+        .btn-group { display: flex; gap: 10px; }
+        button { flex: 1; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn-download { background: var(--primary); color: #004d40; }
+        .btn-download:hover { background: #00c853; transform: scale(1.02); }
+        .btn-reset { background: #f1f3f5; color: #666; }
+
+        .alt-box { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; text-align: left; border-left: 5px solid var(--primary); }
+        .alt-label { font-size: 11px; color: #999; font-weight: 700; margin-bottom: 5px; }
+        .alt-text { font-size: 13px; color: #444; line-height: 1.4; }
+
+        @media (max-width: 1000px) {
+            .container { grid-template-columns: 1fr; }
+            .preview-panel { position: static; }
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="panel">
-            <h1>📝 썸네일 설정</h1>
 
-            <div class="control-group">
-                <label>썸네일 문구</label>
-                <textarea id="text-input" placeholder="문구를 입력하세요">PSN 카드&#10;오류 끝!&#10;지금 끝냄</textarea>
-            </div>
+<div class="container">
+    <!-- 설정 패널 -->
+    <div class="panel">
+        <h2><span>📝</span> 텍스트 및 스타일</h2>
+        
+        <div class="control-group">
+            <label>내용 입력 (엔터로 줄바꿈)</label>
+            <textarea id="text-input">최고의 가독성&#10;썸네일 만들기&#10;지금 바로 시작</textarea>
+        </div>
 
-            <!-- 폰트 선택 추가 -->
-            <div class="control-group">
-                <label>폰트 종류</label>
-                <select id="font-family" class="select">
-                    <option value="'NanumSquareNeo', sans-serif">나눔스퀘어 네오 (깔끔/기본)</option>
-                    <option value="'GmarketSansBold', sans-serif">G마켓 산스 (강조/제목)</option>
-                    <option value="'Black Han Sans', sans-serif">블랙 한 산스 (강력한 임팩트)</option>
-                    <option value="'Do Hyeon', sans-serif">도현체 (부드러운 강조)</option>
-                    <option value="'Jua', sans-serif">주아체 (둥글둥글/귀여운)</option>
-                    <option value="'Nanum Myeongjo', serif">나눔명조 (격식/감성)</option>
-                    <option value="'Noto Sans KR', sans-serif">본고딕 (세련된/표준)</option>
-                </select>
-            </div>
-
-            <div class="control-group">
-                <label>색상 설정</label>
-                <div class="color-group">
-                    <div class="color-item">
-                        <div class="color-row">
-                            <input type="color" id="bg-color-picker" value="#000000">
-                            <input type="text" id="bg-color" value="#000000" class="color-input" maxlength="7">
-                        </div>
-                        <span class="color-label">배경색</span>
-                    </div>
-                    <div class="color-item">
-                        <div class="color-row">
-                            <input type="color" id="text-color-picker" value="#ede02a">
-                            <input type="text" id="text-color" value="#ede02a" class="color-input" maxlength="7">
-                        </div>
-                        <span class="color-label">글씨색</span>
-                    </div>
-                    <div class="color-item">
-                        <div class="color-row">
-                            <input type="color" id="border-color-picker" value="#ede02a">
-                            <input type="text" id="border-color" value="#ede02a" class="color-input" maxlength="7">
-                        </div>
-                        <span class="color-label">테두리색</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label>형광 컬러 팔레트</label>
-                <div class="palette-grid">
-                    <button class="palette-btn" data-color="#ede02a" style="background: #ede02a;"></button>
-                    <button class="palette-btn" data-color="#00e676" style="background: #00e676;"></button>
-                    <button class="palette-btn" data-color="#ff1744" style="background: #ff1744;"></button>
-                    <button class="palette-btn" data-color="#ff9100" style="background: #ff9100;"></button>
-                    <button class="palette-btn" data-color="#00e5ff" style="background: #00e5ff;"></button>
-                    <button class="palette-btn" data-color="#e040fb" style="background: #e040fb;"></button>
-                    <button class="palette-btn" data-color="#76ff03" style="background: #76ff03;"></button>
-                    <button class="palette-btn" data-color="#ff4081" style="background: #ff4081;"></button>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label>문자 정렬</label>
-                <div class="align-grid">
-                    <div>
-                        <label style="margin-bottom:6px;">가로 정렬</label>
-                        <select id="text-align" class="select">
-                            <option value="center" selected>가운데</option>
-                            <option value="left">왼쪽</option>
-                            <option value="right">오른쪽</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="margin-bottom:6px;">세로 정렬</label>
-                        <select id="vertical-align" class="select">
-                            <option value="middle" selected>가운데</option>
-                            <option value="top">위</option>
-                            <option value="bottom">아래</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label>텍스트 여백: <span class="range-value" id="text-padding-value">60px</span></label>
-                <input type="range" id="text-padding" min="0" max="200" value="60">
-            </div>
-
-            <div class="control-group">
-                <label>폰트 크기: <span class="range-value" id="font-size-value">100px</span></label>
-                <input type="range" id="font-size" min="30" max="200" value="100">
-            </div>
-
-            <div class="control-group">
-                <label>폰트 굵기: <span class="range-value" id="font-weight-value">900</span></label>
-                <input type="range" id="font-weight" min="100" max="900" step="100" value="900">
-            </div>
-
-            <div class="control-group">
-                <label>줄 간격: <span class="range-value" id="line-height-value">1.5</span></label>
-                <input type="range" id="line-height" min="0.8" max="2.5" step="0.1" value="1.5">
-            </div>
-
-            <div class="control-group">
-                <label>테두리 두께: <span class="range-value" id="border-width-value">15px</span></label>
-                <input type="range" id="border-width" min="0" max="50" value="15">
-            </div>
-
-            <div class="button-group" style="display:flex; gap:10px;">
-                <button class="btn-reset" onclick="resetSettings()">초기화</button>
+        <div class="control-group">
+            <label>디자인 프리셋 (추천 조합)</label>
+            <div class="preset-grid" id="preset-grid">
+                <!-- 프리셋 아이템이 JS로 생성됩니다 -->
             </div>
         </div>
 
-        <div class="panel preview-panel">
-            <h1>🖼️ 미리보기</h1>
-            <canvas id="preview-canvas" width="800" height="800"></canvas>
-            <div class="button-group">
-                <button class="btn-download" onclick="downloadThumbnail()">다운로드 (WebP)</button>
+        <h2><span>🎨</span> 세부 커스텀</h2>
+        
+        <div class="control-group">
+            <label>폰트 및 정렬</label>
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+                <select id="font-family" class="select">
+                    <option value="'GmarketSansBold', sans-serif">G마켓 산스</option>
+                    <option value="'Black Han Sans', sans-serif">블랙 한 산스</option>
+                    <option value="'NanumSquareNeo', sans-serif">나눔스퀘어</option>
+                    <option value="'Do Hyeon', sans-serif">도현체</option>
+                    <option value="'Jua', sans-serif">주아체</option>
+                    <option value="'Noto Sans KR', sans-serif">본고딕</option>
+                </select>
+                <select id="text-align" class="select">
+                    <option value="center">가운데 정렬</option>
+                    <option value="left">왼쪽 정렬</option>
+                    <option value="right">오른쪽 정렬</option>
+                </select>
             </div>
-            <div class="alt-tag">
-                <div class="alt-tag-label">생성된 ALT 태그:</div>
-                <div class="alt-tag-text" id="alt-tag-text">썸네일 이미지</div>
+        </div>
+
+        <div class="control-group">
+            <label>색상 직접 선택</label>
+            <div class="color-row">
+                <div class="color-box">
+                    <input type="color" id="bg-color" value="#000000">
+                    <span>배경</span>
+                </div>
+                <div class="color-box">
+                    <input type="color" id="text-color" value="#ede02a">
+                    <span>글자</span>
+                </div>
+                <div class="color-box">
+                    <input type="color" id="border-color" value="#ede02a">
+                    <span>테두리</span>
+                </div>
             </div>
+        </div>
+
+        <div class="control-group">
+            <label>상세 조절</label>
+            <div class="range-item">
+                <div style="display:flex; justify-content:space-between;"><small>폰트 크기</small><span class="range-val" id="fs-val">100px</span></div>
+                <input type="range" id="font-size" min="40" max="180" value="100">
+            </div>
+            <div class="range-item" style="margin-top:15px;">
+                <div style="display:flex; justify-content:space-between;"><small>테두리 두께</small><span class="range-val" id="bw-val">15px</span></div>
+                <input type="range" id="border-width" min="0" max="40" value="15">
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button class="btn-reset" onclick="resetSettings()">초기화</button>
         </div>
     </div>
 
-    <script>
-        const canvas = document.getElementById('preview-canvas');
-        const ctx = canvas.getContext('2d');
-
-        // 요소 참조
-        const textInput = document.getElementById('text-input');
-        const fontFamily = document.getElementById('font-family');
-        const bgColor = document.getElementById('bg-color');
-        const textColor = document.getElementById('text-color');
-        const borderColor = document.getElementById('border-color');
-        const bgColorPicker = document.getElementById('bg-color-picker');
-        const textColorPicker = document.getElementById('text-color-picker');
-        const borderColorPicker = document.getElementById('border-color-picker');
-        const textAlign = document.getElementById('text-align');
-        const verticalAlign = document.getElementById('vertical-align');
-        const textPadding = document.getElementById('text-padding');
-        const fontSize = document.getElementById('font-size');
-        const fontWeight = document.getElementById('font-weight');
-        const lineHeight = document.getElementById('line-height');
-        const borderWidth = document.getElementById('border-width');
-
-        const fontSizeValue = document.getElementById('font-size-value');
-        const fontWeightValue = document.getElementById('font-weight-value');
-        const lineHeightValue = document.getElementById('line-height-value');
-        const borderWidthValue = document.getElementById('border-width-value');
-        const textPaddingValue = document.getElementById('text-padding-value');
-        const altTagText = document.getElementById('alt-tag-text');
-
-        let activeColorInput = null;
-
-        // 초기화 및 이벤트 연결
-        window.onload = () => {
-            document.fonts.ready.then(() => updatePreview());
-        };
-
-        [textInput, fontFamily, textAlign, verticalAlign].forEach(el => 
-            el.addEventListener('change', updatePreview));
+    <!-- 미리보기 패널 -->
+    <div class="panel preview-panel">
+        <h2><span>🖼️</span> 실시간 미리보기</h2>
+        <canvas id="preview-canvas" width="800" height="800"></canvas>
         
-        [textInput, textPadding, fontSize, fontWeight, lineHeight, borderWidth].forEach(el => 
-            el.addEventListener('input', () => {
-                updateLabels();
-                updatePreview();
-            }));
+        <div class="btn-group">
+            <button class="btn-download" onclick="downloadWebP()">WebP 이미지 다운로드</button>
+        </div>
 
-        // 컬러 업데이트 로직
-        function updateLabels() {
-            fontSizeValue.textContent = fontSize.value + 'px';
-            fontWeightValue.textContent = fontWeight.value;
-            lineHeightValue.textContent = lineHeight.value;
-            borderWidthValue.textContent = borderWidth.value + 'px';
-            textPaddingValue.textContent = textPadding.value + 'px';
+        <div class="alt-box">
+            <div class="alt-label">자동 생성된 ALT 태그 (SEO 추천)</div>
+            <div class="alt-text" id="alt-text"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('preview-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // 디자인 프리셋 데이터
+    const presets = [
+        { name: '네온 옐로우', bg: '#000000', text: '#ede02a', border: '#ede02a', font: "'GmarketSansBold', sans-serif" },
+        { name: '강렬한 레드', bg: '#d32f2f', text: '#ffffff', border: '#000000', font: "'Black Han Sans', sans-serif" },
+        { name: '시크 화이트', bg: '#ffffff', text: '#000000', border: '#000000', font: "'NanumSquareNeo', sans-serif" },
+        { name: '사이버 펑크', bg: '#212121', text: '#00e5ff', border: '#00e5ff', font: "'GmarketSansBold', sans-serif" },
+        { name: '딥 그린', bg: '#1b5e20', text: '#ccff90', border: '#ccff90', font: "'Do Hyeon', sans-serif" },
+        { name: '베리 핑크', bg: '#f06292', text: '#ffffff', border: '#ffffff', font: "'Jua', sans-serif" }
+    ];
+
+    // 요소 참조
+    const inputs = ['text-input', 'font-family', 'text-align', 'bg-color', 'text-color', 'border-color', 'font-size', 'border-width'];
+    const elements = {};
+    inputs.forEach(id => elements[id] = document.getElementById(id));
+
+    // 프리셋 그리드 생성
+    const presetGrid = document.getElementById('preset-grid');
+    presets.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'preset-item';
+        item.innerHTML = `
+            <div class="preset-preview" style="background:${p.bg}; color:${p.text}; border:2px solid ${p.border}; font-family:${p.font}">가나다</div>
+            <div class="preset-name">${p.name}</div>
+        `;
+        item.onclick = () => applyPreset(p);
+        presetGrid.appendChild(item);
+    });
+
+    function applyPreset(p) {
+        elements['bg-color'].value = p.bg;
+        elements['text-color'].value = p.text;
+        elements['border-color'].value = p.border;
+        elements['font-family'].value = p.font;
+        updatePreview();
+    }
+
+    // 초기화 및 실시간 업데이트
+    function init() {
+        inputs.forEach(id => {
+            elements[id].addEventListener('input', updatePreview);
+        });
+        document.fonts.ready.then(updatePreview);
+    }
+
+    function updatePreview() {
+        const text = elements['text-input'].value;
+        const lines = text.split('\n');
+        const fs = parseInt(elements['font-size'].value);
+        const bw = parseInt(elements['border-width'].value);
+        
+        // 수치 표시
+        document.getElementById('fs-val').textContent = fs + 'px';
+        document.getElementById('bw-val').textContent = bw + 'px';
+
+        // 배경
+        ctx.fillStyle = elements['bg-color'].value;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 테두리
+        if (bw > 0) {
+            ctx.strokeStyle = elements['border-color'].value;
+            ctx.lineWidth = bw * 2; // 안쪽으로 그려지는 느낌을 위해 2배
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
         }
 
-        // 컬러 피커 및 HEX 입력 싱크
-        function syncColor(picker, hex, type) {
-            picker.addEventListener('input', () => { hex.value = picker.value.toUpperCase(); updatePreview(); });
-            hex.addEventListener('input', () => { if(/^#[0-9A-F]{6}$/i.test(hex.value)) { picker.value = hex.value; updatePreview(); }});
-            hex.addEventListener('focus', () => activeColorInput = hex);
-            picker.addEventListener('focus', () => activeColorInput = hex);
+        // 텍스트 설정
+        ctx.fillStyle = elements['text-color'].value;
+        ctx.font = `900 ${fs}px ${elements['font-family'].value}`;
+        ctx.textBaseline = 'middle';
+        
+        let x = canvas.width / 2;
+        if (elements['text-align'].value === 'left') {
+            ctx.textAlign = 'left';
+            x = 60 + bw;
+        } else if (elements['text-align'].value === 'right') {
+            ctx.textAlign = 'right';
+            x = canvas.width - 60 - bw;
+        } else {
+            ctx.textAlign = 'center';
         }
-        syncColor(bgColorPicker, bgColor);
-        syncColor(textColorPicker, textColor);
-        syncColor(borderColorPicker, borderColor);
 
-        // 팔레트 버튼
-        document.querySelectorAll('.palette-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const color = btn.dataset.color;
-                if(activeColorInput) {
-                    activeColorInput.value = color.toUpperCase();
-                    if(activeColorInput === bgColor) bgColorPicker.value = color;
-                    if(activeColorInput === textColor) textColorPicker.value = color;
-                    if(activeColorInput === borderColor) borderColorPicker.value = color;
-                } else {
-                    textColor.value = color.toUpperCase();
-                    textColorPicker.value = color;
-                    borderColor.value = color.toUpperCase();
-                    borderColorPicker.value = color;
-                }
-                updatePreview();
-            });
+        const lh = fs * 1.3;
+        const totalH = lines.length * lh;
+        let startY = (canvas.height - totalH) / 2 + (lh / 2);
+
+        lines.forEach((line, i) => {
+            ctx.fillText(line, x, startY + (i * lh));
         });
 
-        function updatePreview() {
-            const lines = textInput.value.split('\n');
-            const bw = parseInt(borderWidth.value);
-            const fs = parseInt(fontSize.value);
-            const fw = fontWeight.value;
-            const lh = parseFloat(lineHeight.value);
-            const pad = parseInt(textPadding.value);
-            const font = fontFamily.value;
+        // ALT 태그
+        const clean = text.replace(/\n/g, ' ').trim();
+        document.getElementById('alt-text').textContent = `${clean} - 블로그 썸네일 이미지 디자인`;
+    }
 
-            // 배경 그리기
-            ctx.fillStyle = bgColor.value;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+    function downloadWebP() {
+        const link = document.createElement('a');
+        const name = elements['text-input'].value.split('\n')[0].substring(0, 10);
+        link.download = `thumbnail-${name}.webp`;
+        link.href = canvas.toDataURL('image/webp', 0.9);
+        link.click();
+    }
 
-            // 테두리 그리기
-            if (bw > 0) {
-                ctx.strokeStyle = borderColor.value;
-                ctx.lineWidth = bw;
-                ctx.strokeRect(bw/2, bw/2, canvas.width - bw, canvas.height - bw);
-            }
+    function resetSettings() {
+        elements['text-input'].value = "최고의 가독성\n썸네일 만들기\n지금 바로 시작";
+        applyPreset(presets[0]);
+    }
 
-            // 텍스트 설정
-            ctx.fillStyle = textColor.value;
-            ctx.font = `${fw} ${fs}px ${font}`;
-            ctx.textBaseline = 'middle';
+    init();
+</script>
 
-            // 가로 위치 계산
-            let x = canvas.width / 2;
-            if (textAlign.value === 'left') {
-                ctx.textAlign = 'left';
-                x = pad + bw;
-            } else if (textAlign.value === 'right') {
-                ctx.textAlign = 'right';
-                x = canvas.width - pad - bw;
-            } else {
-                ctx.textAlign = 'center';
-            }
-
-            // 세로 위치 계산
-            const totalTextHeight = lines.length * fs * lh;
-            let startY;
-            if (verticalAlign.value === 'top') {
-                startY = pad + bw + (fs * lh / 2);
-            } else if (verticalAlign.value === 'bottom') {
-                startY = canvas.height - pad - bw - totalTextHeight + (fs * lh / 2);
-            } else {
-                startY = (canvas.height - totalTextHeight) / 2 + (fs * lh / 2);
-            }
-
-            // 줄별 렌더링
-            lines.forEach((line, i) => {
-                ctx.fillText(line, x, startY + (i * fs * lh));
-            });
-
-            // Alt 태그 업데이트
-            const cleanText = textInput.value.replace(/\n/g, ' ').trim();
-            altTagText.textContent = cleanText ? `${cleanText} - 블로그 썸네일` : "썸네일 이미지";
-        }
-
-        function downloadThumbnail() {
-            const link = document.createElement('a');
-            link.download = `thumbnail-${Date.now()}.webp`;
-            link.href = canvas.toDataURL('image/webp', 0.9);
-            link.click();
-        }
-
-        function resetSettings() {
-            textInput.value = "PSN 카드\n오류 끝!\n지금 끝냄";
-            fontFamily.value = "'NanumSquareNeo', sans-serif";
-            bgColor.value = "#000000";
-            textColor.value = "#EDE02A";
-            borderColor.value = "#EDE02A";
-            bgColorPicker.value = "#000000";
-            textColorPicker.value = "#EDE02A";
-            borderColorPicker.value = "#EDE02A";
-            fontSize.value = 100;
-            borderWidth.value = 15;
-            textAlign.value = "center";
-            verticalAlign.value = "middle";
-            updateLabels();
-            updatePreview();
-        }
-    </script>
 </body>
 </html>
