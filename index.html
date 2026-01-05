@@ -3,196 +3,285 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>블로그 썸네일 메이커 v2.0</title>
-    <!-- 고퀄리티 웹폰트 로드 -->
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@900&family=Bagel+Fat+One&display=swap" rel="stylesheet">
+    <title>Thumbnail Master Pro - Nanum Edition</title>
+    
+    <!-- 폰트 로드: 나눔스퀘어 네오 (Naver) -->
+    <link rel="stylesheet" type="text/css" href="https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeo.css">
+    
+    <!-- 폰트 로드: Pretendard & Google Fonts -->
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Bagel+Fat+One&display=swap" rel="stylesheet">
+    
     <style>
-        /* 추가 웹폰트 (눈누 및 CDN) */
-        @font-face {
-            font-family: 'Pretendard-Black';
-            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff') format('woff');
-            font-weight: 900;
-        }
-        @font-face {
-            font-family: 'TmonMonsori';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff');
-        }
-        @font-face {
-            font-family: 'Esamanru';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/EsamanruBold.woff') format('woff');
-            font-weight: 700;
-        }
-        @font-face {
-            font-family: 'Suite-Heavy';
-            src: url('https://fastly.jsdelivr.net/gh/sunnypark91/sunnypark91@1.2/SUITE-Heavy.woff2') format('woff2');
-        }
-        @font-face {
-            font-family: 'LeferiPoint-BlackOblique';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-BlackObliqueA.woff') format('woff');
-        }
-        @font-face {
-            font-family: 'GmarketSansBold';
-            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');
-        }
+        /* 커스텀 웹폰트 정의 */
+        @font-face { font-family: 'TmonMonsori'; src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff'); }
+        @font-face { font-family: 'GmarketSansBold'; src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff'); }
+        @font-face { font-family: 'Esamanru'; src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/EsamanruBold.woff') format('woff'); }
 
         :root {
-            --primary: #4f46e5;
-            --success: #10b981;
-            --bg-canvas: #ffffff;
+            --bg-main: #f8fafc;
+            --sidebar-bg: #ffffff;
+            --accent: #00d179; /* 나눔 네오와 잘 어울리는 네이버 그린 포인트 */
+            --text-dark: #0f172a;
+            --text-light: #64748b;
+            --border: #e2e8f0;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; letter-spacing: -0.02em; }
-        body { font-family: 'Pretendard-Black', sans-serif; background: #f1f5f9; padding: 40px 20px; color: #1e293b; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'NanumSquareNeo', 'Pretendard', sans-serif; letter-spacing: -0.02em; }
+        body { background-color: var(--bg-main); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
 
-        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 420px 1fr; gap: 40px; }
-
-        /* 설정 패널 */
-        .panel { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
-        h2 { font-size: 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        /* 사이드바 */
+        .sidebar {
+            width: 420px; background: var(--sidebar-bg); border-right: 1px solid var(--border);
+            display: flex; flex-direction: column; height: 100%; overflow-y: auto;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.02);
+        }
+        .sidebar-header { padding: 30px; border-bottom: 1px solid var(--border); }
+        .sidebar-header h1 { font-size: 20px; font-weight: 900; color: var(--accent); }
         
-        .section-title { font-size: 13px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: block; }
+        .config-section { padding: 30px; border-bottom: 1px solid var(--border); }
+        .config-title { font-size: 14px; font-weight: 800; color: var(--text-dark); margin-bottom: 15px; display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
 
-        .control-group { margin-bottom: 30px; }
-        textarea { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; min-height: 110px; transition: 0.2s; resize: none; }
-        textarea:focus { outline: none; border-color: var(--primary); background: #f8fafc; }
-
-        /* 프리셋 디자인 */
-        .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .preset-item { 
-            border: 2px solid #f1f5f9; border-radius: 16px; padding: 8px; cursor: pointer; 
-            transition: 0.2s; background: #fff;
-        }
-        .preset-item:hover { border-color: var(--primary); transform: translateY(-2px); }
-        .preset-preview { 
-            width: 100%; height: 50px; border-radius: 10px; display: flex; 
-            align-items: center; justify-content: center; font-size: 12px; font-weight: 900; margin-bottom: 6px;
-        }
-        .preset-name { font-size: 11px; font-weight: 700; color: #475569; text-align: center; }
-
-        /* 셀렉트 및 컬러 */
-        .select { width: 100%; height: 48px; padding: 0 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-weight: 700; cursor: pointer; appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 12px center/16px; }
+        label { display: block; font-size: 11px; font-weight: 700; color: var(--text-light); margin-bottom: 8px; }
         
-        .color-row { display: flex; gap: 12px; }
-        .color-box { flex: 1; text-align: center; }
-        .color-box input[type="color"] { width: 100%; height: 40px; border: none; border-radius: 8px; cursor: pointer; background: none; }
-        .color-box span { font-size: 11px; font-weight: 700; color: #94a3b8; margin-top: 5px; display: block; }
+        textarea {
+            width: 100%; padding: 18px; border: 2px solid var(--border); border-radius: 14px;
+            font-size: 16px; font-weight: 700; resize: none; min-height: 110px; transition: 0.2s;
+            background: #f1f5f9;
+        }
+        textarea:focus { outline: none; border-color: var(--accent); background: #fff; box-shadow: 0 0 0 4px rgba(0, 209, 121, 0.1); }
 
-        /* 미리보기 패널 */
-        .preview-panel { position: sticky; top: 40px; display: flex; flex-direction: column; align-items: center; }
-        #preview-canvas { width: 100%; max-width: 650px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); background: #fff; margin-bottom: 24px; }
+        /* 셀렉트 박스 폰트 적용 */
+        .select {
+            width: 100%; height: 52px; padding: 0 15px; border: 2px solid var(--border); border-radius: 12px;
+            font-size: 15px; font-weight: 800; cursor: pointer; background: #fff;
+        }
+        option[value="NanumSquareNeo"] { font-family: 'NanumSquareNeo', sans-serif; }
+        option[value="TmonMonsori"] { font-family: 'TmonMonsori', sans-serif; }
+        option[value="GmarketSansBold"] { font-family: 'GmarketSansBold', sans-serif; }
+        option[value="Esamanru"] { font-family: 'Esamanru', sans-serif; }
+        option[value="Bagel Fat One"] { font-family: 'Bagel Fat One', sans-serif; }
 
-        .btn-download { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4); }
-        .btn-download:hover { background: #4338ca; transform: translateY(-2px); }
+        /* 프리셋 카드 */
+        .preset-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .preset-card {
+            border: 2px solid var(--border); border-radius: 16px; padding: 12px; cursor: pointer; transition: 0.2s; background: #fff;
+        }
+        .preset-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        .preset-card.active { border-color: var(--accent); background: #f0fff4; }
+        .preset-box { 
+            width: 100%; height: 60px; border-radius: 10px; margin-bottom: 10px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 14px; font-weight: 900; overflow: hidden;
+        }
+        .preset-label { font-size: 12px; font-weight: 800; text-align: center; }
 
-        .alt-box { width: 100%; margin-top: 24px; padding: 20px; background: white; border-radius: 16px; border-left: 6px solid var(--primary); }
-        .alt-text { font-size: 14px; color: #475569; font-weight: 500; }
+        /* 슬라이더 */
+        .range-wrap { margin-bottom: 20px; }
+        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+        .val-badge { float: right; color: var(--accent); font-weight: 900; }
 
-        @media (max-width: 1000px) { .container { grid-template-columns: 1fr; } .preview-panel { position: static; } }
+        /* 미리보기 영역 */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; overflow-y: auto;
+        }
+        .canvas-container {
+            background: #fff; padding: 25px; border-radius: 40px;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.15);
+        }
+        canvas { max-width: 100%; height: auto; border-radius: 20px; display: block; }
+
+        .btn-download {
+            width: 100%; max-width: 600px; margin-top: 40px; padding: 22px; 
+            background: var(--accent); color: white; border: none;
+            border-radius: 20px; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s;
+            box-shadow: 0 15px 30px rgba(0, 209, 121, 0.25);
+        }
+        .btn-download:hover { background: #00b368; transform: translateY(-4px); box-shadow: 0 20px 40px rgba(0, 209, 121, 0.35); }
+
+        .color-grid { display: flex; gap: 15px; }
+        .color-item { flex: 1; text-align: center; }
+        .color-item input[type="color"] {
+            width: 100%; height: 45px; border-radius: 12px; border: 2px solid var(--border); cursor: pointer; background: #fff; padding: 3px;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="panel">
-        <h2><span>🎨</span> 디자인 센터</h2>
+<aside class="sidebar">
+    <div class="sidebar-header">
+        <h1>THUMBNAIL MASTER PRO</h1>
+    </div>
+
+    <div class="config-section">
+        <div class="config-title">📝 메인 문구 편집</div>
+        <textarea id="text-input">최애 폰트&#10;나눔스퀘어 네오&#10;깔끔함의 끝판왕</textarea>
+    </div>
+
+    <div class="config-section">
+        <div class="config-title">🔠 서체 및 레이아웃</div>
+        <div style="margin-bottom: 20px;">
+            <label>폰트 종류</label>
+            <select id="font-family" class="select">
+                <option value="NanumSquareNeo" selected>✨ 나눔스퀘어 네오 (추천)</option>
+                <option value="TmonMonsori">티몬 몬소리 (제목용)</option>
+                <option value="GmarketSansBold">G마켓 산스 (모던)</option>
+                <option value="Esamanru">이사만루 (강조)</option>
+                <option value="Bagel Fat One">베이글 팻 (트렌디)</option>
+                <option value="Pretendard">프리텐다드 (깔끔)</option>
+                <option value="Black Han Sans">블랙 한 산스 (꽉찬)</option>
+                <option value="Do Hyeon">도현체</option>
+                <option value="Jua">주아체</option>
+            </select>
+        </div>
         
-        <div class="control-group">
-            <span class="section-title">문구 수정</span>
-            <textarea id="text-input">오늘의 추천&#10;대박 맛집 리스트&#10;TOP 5 공개</textarea>
-        </div>
-
-        <div class="control-group">
-            <span class="section-title">인기 스타일 프리셋</span>
-            <div class="preset-grid" id="preset-grid"></div>
-        </div>
-
-        <div class="control-group">
-            <span class="section-title">상세 폰트 설정</span>
-            <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:10px;">
-                <select id="font-family" class="select">
-                    <option value="TmonMonsori">티몬 몬소리 (강추)</option>
-                    <option value="Pretendard-Black">프리텐다드 (세련)</option>
-                    <option value="Esamanru">이사만루 (역동)</option>
-                    <option value="Bagel Fat One">베이글팻 (팝아트)</option>
-                    <option value="GmarketSansBold">G마켓 산스</option>
-                    <option value="Suite-Heavy">SUITE (깔끔)</option>
-                    <option value="LeferiPoint-BlackOblique">레페리 (유니크)</option>
-                    <option value="Black Han Sans">블랙한산스</option>
-                </select>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+            <div>
+                <label>정렬 방식</label>
                 <select id="text-align" class="select">
                     <option value="center">중앙 정렬</option>
                     <option value="left">왼쪽 정렬</option>
                     <option value="right">오른쪽 정렬</option>
                 </select>
             </div>
-        </div>
-
-        <div class="control-group">
-            <span class="section-title">컬러 테마</span>
-            <div class="color-row">
-                <div class="color-box"><input type="color" id="bg-color" value="#ffffff"><span>배경색</span></div>
-                <div class="color-box"><input type="color" id="text-color" value="#000000"><span>글자색</span></div>
-                <div class="color-box"><input type="color" id="border-color" value="#4f46e5"><span>포인트</span></div>
+            <div class="range-wrap">
+                <label>글자 크기 <span class="val-badge" id="fs-val">115px</span></label>
+                <input type="range" id="font-size" min="40" max="220" value="115">
             </div>
         </div>
 
-        <div class="control-group">
-            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                <span class="section-title" style="margin:0;">폰트 크기</span>
-                <b id="fs-val" style="color:var(--primary)">110px</b>
+        <div class="config-title">🎨 컬러 테마 커스텀</div>
+        <div class="color-grid">
+            <div class="color-item">
+                <label>배경</label>
+                <input type="color" id="bg-color" value="#ffffff">
             </div>
-            <input type="range" id="font-size" min="40" max="200" value="110" style="width:100%; accent-color:var(--primary);">
+            <div class="color-item">
+                <label>글자</label>
+                <input type="color" id="text-color" value="#000000">
+            </div>
+            <div class="color-item">
+                <label>포인트</label>
+                <input type="color" id="accent-color" value="#00d179">
+            </div>
         </div>
     </div>
 
-    <div class="preview-panel">
+    <div class="config-section">
+        <div class="config-title">🚀 퀵 테마 프리셋</div>
+        <div class="preset-grid" id="preset-grid"></div>
+    </div>
+</aside>
+
+<main class="main-content">
+    <div class="canvas-container">
         <canvas id="preview-canvas" width="800" height="800"></canvas>
-        <button class="btn-download" onclick="downloadImage()">이미지 저장하기 (.WebP)</button>
-        <div class="alt-box">
-            <span class="section-title" style="color:var(--primary)">SEO 추천 태그</span>
-            <div class="alt-text" id="alt-text"></div>
-        </div>
     </div>
-</div>
+    <button class="btn-download" onclick="downloadImage()">이미지 저장 (High Quality WebP)</button>
+</main>
 
 <script>
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
 
-    // 프리셋 데이터 업데이트 (추가된 폰트 위주)
+    // 프리셋 데이터 (나눔스퀘어 네오 포함)
     const presets = [
-        { name: '유튜브 클래식', bg: '#ffffff', text: '#000000', border: '#ff0000', font: 'TmonMonsori' },
-        { name: '트렌디 블랙', bg: '#000000', text: '#ffffff', border: '#4f46e5', font: 'Pretendard-Black' },
-        { name: '네온 팝', bg: '#000000', text: '#ccff00', border: '#ccff00', font: 'Bagel Fat One' },
-        { name: '깔끔한 정보', bg: '#f8fafc', text: '#1e293b', border: '#38bdf8', font: 'Suite-Heavy' },
-        { name: '에너지 오렌지', bg: '#ff6b00', text: '#ffffff', border: '#ffffff', font: 'Esamanru' },
-        { name: '감성 라이프', bg: '#fff5f5', text: '#ff4d4d', border: '#ff4d4d', font: 'LeferiPoint-BlackOblique' }
+        { name: '나눔 시그니처', bg: '#ffffff', text: '#000000', accent: '#00d179', font: 'NanumSquareNeo' },
+        { name: '다크 네온', bg: '#000000', text: '#00ff95', accent: '#00ff95', font: 'GmarketSansBold' },
+        { name: '강렬 레드', bg: '#f43f5e', text: '#ffffff', accent: '#ffffff', font: 'Esamanru' },
+        { name: '사이버 팝', bg: '#000000', text: '#f0abfc', accent: '#f0abfc', font: 'Bagel Fat One' }
     ];
 
-    const inputIds = ['text-input', 'font-family', 'text-align', 'bg-color', 'text-color', 'border-color', 'font-size'];
-    const inputs = {};
-    inputIds.forEach(id => inputs[id] = document.getElementById(id));
+    const elements = {
+        text: document.getElementById('text-input'),
+        font: document.getElementById('font-family'),
+        align: document.getElementById('text-align'),
+        bg: document.getElementById('bg-color'),
+        textColor: document.getElementById('text-color'),
+        accent: document.getElementById('accent-color'),
+        fontSize: document.getElementById('font-size'),
+        fsVal: document.getElementById('fs-val'),
+        presetGrid: document.getElementById('preset-grid')
+    };
 
-    // 프리셋 UI 생성
-    const presetGrid = document.getElementById('preset-grid');
-    presets.forEach(p => {
-        const item = document.createElement('div');
-        item.className = 'preset-item';
-        item.innerHTML = `
-            <div class="preset-preview" style="background:${p.bg}; color:${p.text}; border-left: 5px solid ${p.border}; font-family:${p.font}">가나다</div>
-            <div class="preset-name">${p.name}</div>
+    // 프리셋 카드 동적 생성
+    presets.forEach((p) => {
+        const card = document.createElement('div');
+        card.className = 'preset-card';
+        card.innerHTML = `
+            <div class="preset-box" style="background:${p.bg}; color:${p.text}; border-left: 6px solid ${p.accent}; font-family:'${p.font}'">가나다</div>
+            <div class="preset-label">${p.name}</div>
         `;
-        item.onclick = () => {
-            inputs['bg-color'].value = p.bg;
-            inputs['text-color'].value = p.text;
-            inputs['border-color'].value = p.border;
-            inputs['font-family'].value = p.font;
-            update();
+        card.onclick = () => {
+            elements.bg.value = p.bg;
+            elements.textColor.value = p.text;
+            elements.accent.value = p.accent;
+            elements.font.value = p.font;
+            draw();
         };
-        presetGrid.appendChild(item);
+        elements.presetGrid.appendChild(card);
     });
 
-    function update() {
-        const text = inputs['text-input'].value;
+    function draw() {
+        const text = elements.text.value;
         const lines = text.split('\n');
-        const fs = parseInt(inputs['font-si
+        const fs = parseInt(elements.fontSize.value);
+        elements.fsVal.textContent = fs + 'px';
+
+        // 1. 배경 그리기
+        ctx.fillStyle = elements.bg.value;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // 2. 포인트 장식 (왼쪽 바)
+        ctx.fillStyle = elements.accent.value;
+        ctx.fillRect(0, 0, 30, canvas.height);
+
+        // 3. 텍스트 설정
+        ctx.fillStyle = elements.textColor.value;
+        // 나눔스퀘어 네오의 경우 Heavy(900) 두께를 기본으로 사용
+        ctx.font = `900 ${fs}px "${elements.font.value}", sans-serif`;
+        ctx.textBaseline = 'middle';
+
+        let x = canvas.width / 2 + 15;
+        if(elements.align.value === 'left') {
+            ctx.textAlign = 'left';
+            x = 85;
+        } else if(elements.align.value === 'right') {
+            ctx.textAlign = 'right';
+            x = canvas.width - 55;
+        } else {
+            ctx.textAlign = 'center';
+        }
+
+        const lh = fs * 1.3; // 가독성 좋은 줄 간격
+        const totalH = lines.length * lh;
+        let startY = (canvas.height - totalH) / 2 + (lh / 2);
+
+        // 4. 텍스트 렌더링 (그림자 추가로 선명도 Up)
+        ctx.shadowColor = "rgba(0,0,0,0.1)";
+        ctx.shadowBlur = 12;
+        
+        lines.forEach((line, i) => {
+            ctx.fillText(line, x, startY + (i * lh));
+        });
+    }
+
+    function downloadImage() {
+        const link = document.createElement('a');
+        link.download = `blog-thumb-${Date.now()}.webp`;
+        link.href = canvas.toDataURL('image/webp', 0.95);
+        link.click();
+    }
+
+    // 모든 입력창에 이벤트 리스너 연결
+    [elements.text, elements.font, elements.align, elements.bg, elements.textColor, elements.accent, elements.fontSize].forEach(el => {
+        el.addEventListener('input', draw);
+    });
+
+    // 폰트 완전 로드 후 첫 화면 그리기
+    document.fonts.ready.then(draw);
+</script>
+
+</body>
+</html>
