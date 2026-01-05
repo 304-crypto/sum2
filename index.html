@@ -3,14 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>블로그 썸네일 메이커 PRO</title>
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@900&display=swap" rel="stylesheet">
+    <title>블로그 썸네일 메이커 v2.0</title>
+    <!-- 고퀄리티 웹폰트 로드 -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Nanum+Myeongjo:wght@700&family=Noto+Sans+KR:wght@900&family=Bagel+Fat+One&display=swap" rel="stylesheet">
     <style>
-        /* 폰트 설정 */
+        /* 추가 웹폰트 (눈누 및 CDN) */
         @font-face {
-            font-family: 'NanumSquareNeo';
-            src: url(https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeoTTF-cBd.woff2);
+            font-family: 'Pretendard-Black';
+            src: url('https://fastly.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Black.woff') format('woff');
+            font-weight: 900;
+        }
+        @font-face {
+            font-family: 'TmonMonsori';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_two@1.0/TmonMonsori.woff') format('woff');
+        }
+        @font-face {
+            font-family: 'Esamanru';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/EsamanruBold.woff') format('woff');
             font-weight: 700;
+        }
+        @font-face {
+            font-family: 'Suite-Heavy';
+            src: url('https://fastly.jsdelivr.net/gh/sunnypark91/sunnypark91@1.2/SUITE-Heavy.woff2') format('woff2');
+        }
+        @font-face {
+            font-family: 'LeferiPoint-BlackOblique';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/LeferiPoint-BlackObliqueA.woff') format('woff');
         }
         @font-face {
             font-family: 'GmarketSansBold';
@@ -18,108 +36,91 @@
         }
 
         :root {
-            --primary: #00e676;
-            --bg-gray: #f8f9fa;
+            --primary: #4f46e5;
+            --success: #10b981;
+            --bg-canvas: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'NanumSquareNeo', sans-serif; background: #eef2f5; padding: 20px; color: #333; }
+        * { margin: 0; padding: 0; box-sizing: border-box; letter-spacing: -0.02em; }
+        body { font-family: 'Pretendard-Black', sans-serif; background: #f1f5f9; padding: 40px 20px; color: #1e293b; }
 
-        .container { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 450px 1fr; gap: 30px; }
+        .container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 420px 1fr; gap: 40px; }
 
-        /* 패널 공통 */
-        .panel { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        h2 { font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
-        h2 span { font-size: 22px; }
+        /* 설정 패널 */
+        .panel { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        h2 { font-size: 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+        
+        .section-title { font-size: 13px; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 12px; display: block; }
 
-        .control-group { margin-bottom: 25px; }
-        label { display: block; margin-bottom: 8px; font-weight: 700; color: #444; font-size: 14px; }
+        .control-group { margin-bottom: 30px; }
+        textarea { width: 100%; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; font-size: 16px; min-height: 110px; transition: 0.2s; resize: none; }
+        textarea:focus { outline: none; border-color: var(--primary); background: #f8fafc; }
 
-        /* 입력 요소 */
-        textarea { width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 10px; font-family: inherit; font-size: 16px; min-height: 100px; transition: 0.3s; }
-        textarea:focus { outline: none; border-color: var(--primary); }
-
-        .select { width: 100%; height: 45px; padding: 0 10px; border: 2px solid #eee; border-radius: 10px; font-weight: 700; cursor: pointer; }
-
-        /* 디자인 프리셋 그리드 */
-        .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 10px; }
+        /* 프리셋 디자인 */
+        .preset-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .preset-item { 
-            border: 2px solid #eee; border-radius: 12px; padding: 10px; cursor: pointer; 
-            transition: 0.2s; text-align: center; position: relative; overflow: hidden;
-            display: flex; flex-direction: column; align-items: center; gap: 5px;
+            border: 2px solid #f1f5f9; border-radius: 16px; padding: 8px; cursor: pointer; 
+            transition: 0.2s; background: #fff;
         }
-        .preset-item:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .preset-item:hover { border-color: var(--primary); transform: translateY(-2px); }
         .preset-preview { 
-            width: 100%; height: 60px; border-radius: 6px; display: flex; 
-            align-items: center; justify-content: center; font-size: 14px; font-weight: 900;
+            width: 100%; height: 50px; border-radius: 10px; display: flex; 
+            align-items: center; justify-content: center; font-size: 12px; font-weight: 900; margin-bottom: 6px;
         }
-        .preset-name { font-size: 12px; font-weight: 700; color: #666; }
+        .preset-name { font-size: 11px; font-weight: 700; color: #475569; text-align: center; }
 
-        /* 컬러 커스텀 */
-        .color-row { display: flex; gap: 10px; margin-top: 10px; }
-        .color-box { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .color-box input[type="color"] { width: 100%; height: 35px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; }
-        .color-box span { font-size: 11px; font-weight: 700; color: #888; }
-
-        /* 슬라이더 커스텀 */
-        .range-wrapper { display: flex; align-items: center; gap: 10px; }
-        input[type="range"] { flex: 1; height: 6px; border-radius: 3px; accent-color: var(--primary); cursor: pointer; }
-        .range-val { min-width: 45px; font-size: 13px; font-weight: 800; color: var(--primary); text-align: right; }
+        /* 셀렉트 및 컬러 */
+        .select { width: 100%; height: 48px; padding: 0 12px; border: 2px solid #e2e8f0; border-radius: 12px; font-weight: 700; cursor: pointer; appearance: none; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 12px center/16px; }
+        
+        .color-row { display: flex; gap: 12px; }
+        .color-box { flex: 1; text-align: center; }
+        .color-box input[type="color"] { width: 100%; height: 40px; border: none; border-radius: 8px; cursor: pointer; background: none; }
+        .color-box span { font-size: 11px; font-weight: 700; color: #94a3b8; margin-top: 5px; display: block; }
 
         /* 미리보기 패널 */
-        .preview-panel { position: sticky; top: 20px; text-align: center; }
-        #preview-canvas { width: 100%; max-width: 600px; border-radius: 15px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); margin-bottom: 20px; background: #fff; }
+        .preview-panel { position: sticky; top: 40px; display: flex; flex-direction: column; align-items: center; }
+        #preview-canvas { width: 100%; max-width: 650px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); background: #fff; margin-bottom: 24px; }
 
-        .btn-group { display: flex; gap: 10px; }
-        button { flex: 1; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s; }
-        .btn-download { background: var(--primary); color: #004d40; }
-        .btn-download:hover { background: #00c853; transform: scale(1.02); }
-        .btn-reset { background: #f1f3f5; color: #666; }
+        .btn-download { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 16px; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.4); }
+        .btn-download:hover { background: #4338ca; transform: translateY(-2px); }
 
-        .alt-box { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 10px; text-align: left; border-left: 5px solid var(--primary); }
-        .alt-label { font-size: 11px; color: #999; font-weight: 700; margin-bottom: 5px; }
-        .alt-text { font-size: 13px; color: #444; line-height: 1.4; }
+        .alt-box { width: 100%; margin-top: 24px; padding: 20px; background: white; border-radius: 16px; border-left: 6px solid var(--primary); }
+        .alt-text { font-size: 14px; color: #475569; font-weight: 500; }
 
-        @media (max-width: 1000px) {
-            .container { grid-template-columns: 1fr; }
-            .preview-panel { position: static; }
-        }
+        @media (max-width: 1000px) { .container { grid-template-columns: 1fr; } .preview-panel { position: static; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- 설정 패널 -->
     <div class="panel">
-        <h2><span>📝</span> 텍스트 및 스타일</h2>
+        <h2><span>🎨</span> 디자인 센터</h2>
         
         <div class="control-group">
-            <label>내용 입력 (엔터로 줄바꿈)</label>
-            <textarea id="text-input">최고의 가독성&#10;썸네일 만들기&#10;지금 바로 시작</textarea>
+            <span class="section-title">문구 수정</span>
+            <textarea id="text-input">오늘의 추천&#10;대박 맛집 리스트&#10;TOP 5 공개</textarea>
         </div>
 
         <div class="control-group">
-            <label>디자인 프리셋 (추천 조합)</label>
-            <div class="preset-grid" id="preset-grid">
-                <!-- 프리셋 아이템이 JS로 생성됩니다 -->
-            </div>
+            <span class="section-title">인기 스타일 프리셋</span>
+            <div class="preset-grid" id="preset-grid"></div>
         </div>
 
-        <h2><span>🎨</span> 세부 커스텀</h2>
-        
         <div class="control-group">
-            <label>폰트 및 정렬</label>
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom:10px;">
+            <span class="section-title">상세 폰트 설정</span>
+            <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:10px;">
                 <select id="font-family" class="select">
-                    <option value="'GmarketSansBold', sans-serif">G마켓 산스</option>
-                    <option value="'Black Han Sans', sans-serif">블랙 한 산스</option>
-                    <option value="'NanumSquareNeo', sans-serif">나눔스퀘어</option>
-                    <option value="'Do Hyeon', sans-serif">도현체</option>
-                    <option value="'Jua', sans-serif">주아체</option>
-                    <option value="'Noto Sans KR', sans-serif">본고딕</option>
+                    <option value="TmonMonsori">티몬 몬소리 (강추)</option>
+                    <option value="Pretendard-Black">프리텐다드 (세련)</option>
+                    <option value="Esamanru">이사만루 (역동)</option>
+                    <option value="Bagel Fat One">베이글팻 (팝아트)</option>
+                    <option value="GmarketSansBold">G마켓 산스</option>
+                    <option value="Suite-Heavy">SUITE (깔끔)</option>
+                    <option value="LeferiPoint-BlackOblique">레페리 (유니크)</option>
+                    <option value="Black Han Sans">블랙한산스</option>
                 </select>
                 <select id="text-align" class="select">
-                    <option value="center">가운데 정렬</option>
+                    <option value="center">중앙 정렬</option>
                     <option value="left">왼쪽 정렬</option>
                     <option value="right">오른쪽 정렬</option>
                 </select>
@@ -127,51 +128,28 @@
         </div>
 
         <div class="control-group">
-            <label>색상 직접 선택</label>
+            <span class="section-title">컬러 테마</span>
             <div class="color-row">
-                <div class="color-box">
-                    <input type="color" id="bg-color" value="#000000">
-                    <span>배경</span>
-                </div>
-                <div class="color-box">
-                    <input type="color" id="text-color" value="#ede02a">
-                    <span>글자</span>
-                </div>
-                <div class="color-box">
-                    <input type="color" id="border-color" value="#ede02a">
-                    <span>테두리</span>
-                </div>
+                <div class="color-box"><input type="color" id="bg-color" value="#ffffff"><span>배경색</span></div>
+                <div class="color-box"><input type="color" id="text-color" value="#000000"><span>글자색</span></div>
+                <div class="color-box"><input type="color" id="border-color" value="#4f46e5"><span>포인트</span></div>
             </div>
         </div>
 
         <div class="control-group">
-            <label>상세 조절</label>
-            <div class="range-item">
-                <div style="display:flex; justify-content:space-between;"><small>폰트 크기</small><span class="range-val" id="fs-val">100px</span></div>
-                <input type="range" id="font-size" min="40" max="180" value="100">
+            <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
+                <span class="section-title" style="margin:0;">폰트 크기</span>
+                <b id="fs-val" style="color:var(--primary)">110px</b>
             </div>
-            <div class="range-item" style="margin-top:15px;">
-                <div style="display:flex; justify-content:space-between;"><small>테두리 두께</small><span class="range-val" id="bw-val">15px</span></div>
-                <input type="range" id="border-width" min="0" max="40" value="15">
-            </div>
-        </div>
-
-        <div class="btn-group">
-            <button class="btn-reset" onclick="resetSettings()">초기화</button>
+            <input type="range" id="font-size" min="40" max="200" value="110" style="width:100%; accent-color:var(--primary);">
         </div>
     </div>
 
-    <!-- 미리보기 패널 -->
-    <div class="panel preview-panel">
-        <h2><span>🖼️</span> 실시간 미리보기</h2>
+    <div class="preview-panel">
         <canvas id="preview-canvas" width="800" height="800"></canvas>
-        
-        <div class="btn-group">
-            <button class="btn-download" onclick="downloadWebP()">WebP 이미지 다운로드</button>
-        </div>
-
+        <button class="btn-download" onclick="downloadImage()">이미지 저장하기 (.WebP)</button>
         <div class="alt-box">
-            <div class="alt-label">자동 생성된 ALT 태그 (SEO 추천)</div>
+            <span class="section-title" style="color:var(--primary)">SEO 추천 태그</span>
             <div class="alt-text" id="alt-text"></div>
         </div>
     </div>
@@ -181,115 +159,40 @@
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
 
-    // 디자인 프리셋 데이터
+    // 프리셋 데이터 업데이트 (추가된 폰트 위주)
     const presets = [
-        { name: '네온 옐로우', bg: '#000000', text: '#ede02a', border: '#ede02a', font: "'GmarketSansBold', sans-serif" },
-        { name: '강렬한 레드', bg: '#d32f2f', text: '#ffffff', border: '#000000', font: "'Black Han Sans', sans-serif" },
-        { name: '시크 화이트', bg: '#ffffff', text: '#000000', border: '#000000', font: "'NanumSquareNeo', sans-serif" },
-        { name: '사이버 펑크', bg: '#212121', text: '#00e5ff', border: '#00e5ff', font: "'GmarketSansBold', sans-serif" },
-        { name: '딥 그린', bg: '#1b5e20', text: '#ccff90', border: '#ccff90', font: "'Do Hyeon', sans-serif" },
-        { name: '베리 핑크', bg: '#f06292', text: '#ffffff', border: '#ffffff', font: "'Jua', sans-serif" }
+        { name: '유튜브 클래식', bg: '#ffffff', text: '#000000', border: '#ff0000', font: 'TmonMonsori' },
+        { name: '트렌디 블랙', bg: '#000000', text: '#ffffff', border: '#4f46e5', font: 'Pretendard-Black' },
+        { name: '네온 팝', bg: '#000000', text: '#ccff00', border: '#ccff00', font: 'Bagel Fat One' },
+        { name: '깔끔한 정보', bg: '#f8fafc', text: '#1e293b', border: '#38bdf8', font: 'Suite-Heavy' },
+        { name: '에너지 오렌지', bg: '#ff6b00', text: '#ffffff', border: '#ffffff', font: 'Esamanru' },
+        { name: '감성 라이프', bg: '#fff5f5', text: '#ff4d4d', border: '#ff4d4d', font: 'LeferiPoint-BlackOblique' }
     ];
 
-    // 요소 참조
-    const inputs = ['text-input', 'font-family', 'text-align', 'bg-color', 'text-color', 'border-color', 'font-size', 'border-width'];
-    const elements = {};
-    inputs.forEach(id => elements[id] = document.getElementById(id));
+    const inputIds = ['text-input', 'font-family', 'text-align', 'bg-color', 'text-color', 'border-color', 'font-size'];
+    const inputs = {};
+    inputIds.forEach(id => inputs[id] = document.getElementById(id));
 
-    // 프리셋 그리드 생성
+    // 프리셋 UI 생성
     const presetGrid = document.getElementById('preset-grid');
     presets.forEach(p => {
         const item = document.createElement('div');
         item.className = 'preset-item';
         item.innerHTML = `
-            <div class="preset-preview" style="background:${p.bg}; color:${p.text}; border:2px solid ${p.border}; font-family:${p.font}">가나다</div>
+            <div class="preset-preview" style="background:${p.bg}; color:${p.text}; border-left: 5px solid ${p.border}; font-family:${p.font}">가나다</div>
             <div class="preset-name">${p.name}</div>
         `;
-        item.onclick = () => applyPreset(p);
+        item.onclick = () => {
+            inputs['bg-color'].value = p.bg;
+            inputs['text-color'].value = p.text;
+            inputs['border-color'].value = p.border;
+            inputs['font-family'].value = p.font;
+            update();
+        };
         presetGrid.appendChild(item);
     });
 
-    function applyPreset(p) {
-        elements['bg-color'].value = p.bg;
-        elements['text-color'].value = p.text;
-        elements['border-color'].value = p.border;
-        elements['font-family'].value = p.font;
-        updatePreview();
-    }
-
-    // 초기화 및 실시간 업데이트
-    function init() {
-        inputs.forEach(id => {
-            elements[id].addEventListener('input', updatePreview);
-        });
-        document.fonts.ready.then(updatePreview);
-    }
-
-    function updatePreview() {
-        const text = elements['text-input'].value;
+    function update() {
+        const text = inputs['text-input'].value;
         const lines = text.split('\n');
-        const fs = parseInt(elements['font-size'].value);
-        const bw = parseInt(elements['border-width'].value);
-        
-        // 수치 표시
-        document.getElementById('fs-val').textContent = fs + 'px';
-        document.getElementById('bw-val').textContent = bw + 'px';
-
-        // 배경
-        ctx.fillStyle = elements['bg-color'].value;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-        // 테두리
-        if (bw > 0) {
-            ctx.strokeStyle = elements['border-color'].value;
-            ctx.lineWidth = bw * 2; // 안쪽으로 그려지는 느낌을 위해 2배
-            ctx.strokeRect(0, 0, canvas.width, canvas.height);
-        }
-
-        // 텍스트 설정
-        ctx.fillStyle = elements['text-color'].value;
-        ctx.font = `900 ${fs}px ${elements['font-family'].value}`;
-        ctx.textBaseline = 'middle';
-        
-        let x = canvas.width / 2;
-        if (elements['text-align'].value === 'left') {
-            ctx.textAlign = 'left';
-            x = 60 + bw;
-        } else if (elements['text-align'].value === 'right') {
-            ctx.textAlign = 'right';
-            x = canvas.width - 60 - bw;
-        } else {
-            ctx.textAlign = 'center';
-        }
-
-        const lh = fs * 1.3;
-        const totalH = lines.length * lh;
-        let startY = (canvas.height - totalH) / 2 + (lh / 2);
-
-        lines.forEach((line, i) => {
-            ctx.fillText(line, x, startY + (i * lh));
-        });
-
-        // ALT 태그
-        const clean = text.replace(/\n/g, ' ').trim();
-        document.getElementById('alt-text').textContent = `${clean} - 블로그 썸네일 이미지 디자인`;
-    }
-
-    function downloadWebP() {
-        const link = document.createElement('a');
-        const name = elements['text-input'].value.split('\n')[0].substring(0, 10);
-        link.download = `thumbnail-${name}.webp`;
-        link.href = canvas.toDataURL('image/webp', 0.9);
-        link.click();
-    }
-
-    function resetSettings() {
-        elements['text-input'].value = "최고의 가독성\n썸네일 만들기\n지금 바로 시작";
-        applyPreset(presets[0]);
-    }
-
-    init();
-</script>
-
-</body>
-</html>
+        const fs = parseInt(inputs['font-si
