@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thumbnail Pro 5.0 - Variable Fonts</title>
+    <title>Thumbnail Pro 6.0 - Neon & Nanum</title>
     
-    <!-- 폰트 로드: 나눔스퀘어 네오 (전체 두께) -->
+    <!-- 폰트 로드 -->
     <link rel="stylesheet" type="text/css" href="https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeo.css">
-    
-    <!-- 폰트 로드: 프리텐다드 (전체 두께 지원) -->
     <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
-    
-    <!-- 기타 디자인 폰트 (단일 두께) -->
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&family=Jua&family=Bagel+Fat+One&display=swap" rel="stylesheet">
     
     <style>
@@ -20,9 +16,9 @@
         @font-face { font-family: 'Esamanru'; src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/EsamanruBold.woff') format('woff'); }
 
         :root {
-            --bg-main: #f8fafc;
+            --bg-main: #f1f5f9;
             --sidebar-bg: #ffffff;
-            --accent: #00d179;
+            --accent: #ede02a;
             --text-dark: #0f172a;
             --border: #e2e8f0;
         }
@@ -31,48 +27,49 @@
         body { background-color: var(--bg-main); color: var(--text-dark); display: flex; height: 100vh; overflow: hidden; }
 
         /* 사이드바 */
-        .sidebar { width: 450px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100%; overflow-y: auto; z-index: 100; }
+        .sidebar { width: 450px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100%; overflow-y: auto; }
         .sidebar-header { padding: 25px 30px; border-bottom: 1px solid var(--border); background: #fff; position: sticky; top: 0; z-index: 10; }
-        .sidebar-header h1 { font-size: 18px; font-weight: 900; color: var(--accent); }
+        .sidebar-header h1 { font-size: 18px; font-weight: 900; color: #333; }
         
         .config-section { padding: 25px 30px; border-bottom: 1px solid var(--border); }
         .config-title { font-size: 12px; font-weight: 800; color: #94a3b8; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
 
-        textarea { width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; font-weight: 700; resize: none; min-height: 90px; background: #f8fafc; transition: 0.2s; }
-        textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+        textarea { width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 12px; font-size: 16px; font-weight: 700; resize: none; min-height: 90px; background: #f8fafc; }
 
         /* 정렬 아이콘 버튼 */
         .align-group { display: flex; gap: 8px; margin-top: 10px; }
-        .align-btn { 
-            flex: 1; height: 45px; border: 2px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: 0.2s;
-        }
+        .align-btn { flex: 1; height: 45px; border: 2px solid var(--border); border-radius: 10px; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .align-btn svg { width: 22px; height: 22px; fill: #64748b; }
-        .align-btn.active { background: var(--accent); border-color: var(--accent); }
+        .align-btn.active { background: #333; border-color: #333; }
         .align-btn.active svg { fill: #fff; }
 
         .control-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 15px; }
-        .select, .hex-input { width: 100%; height: 48px; padding: 0 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 700; background: #fff; cursor: pointer; }
+        .select, .hex-input { width: 100%; height: 48px; padding: 0 12px; border: 2px solid var(--border); border-radius: 10px; font-size: 14px; font-weight: 700; background: #fff; }
+
+        /* 형광 팔레트 그리드 */
+        .neon-palette { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+        .neon-btn { height: 40px; border-radius: 8px; border: 2px solid var(--border); cursor: pointer; transition: 0.2s; }
+        .neon-btn:hover { transform: scale(1.05); border-color: #333; }
 
         /* 프리셋 */
         .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .preset-card { border: 2px solid var(--border); border-radius: 10px; padding: 6px; cursor: pointer; transition: 0.2s; text-align: center; }
-        .preset-card:hover { border-color: var(--accent); }
+        .preset-card:hover { border-color: #333; }
         .preset-box { width: 100%; height: 40px; border-radius: 6px; margin-bottom: 5px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 900; }
         .preset-label { font-size: 10px; font-weight: 800; color: #64748b; }
 
         /* 메인 영역 */
         .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 40px; overflow-y: auto; justify-content: center; }
-        .preview-wrap { background: #fff; padding: 20px; border-radius: 30px; box-shadow: 0 40px 80px rgba(0,0,0,0.08); }
+        .preview-wrap { background: #fff; padding: 20px; border-radius: 30px; box-shadow: 0 40px 80px rgba(0,0,0,0.1); }
         canvas { width: 450px; height: 450px; border-radius: 15px; display: block; }
 
-        .btn-download { width: 100%; max-width: 450px; margin-top: 30px; padding: 20px; background: var(--accent); color: white; border: none; border-radius: 18px; font-size: 16px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0, 209, 121, 0.2); }
-        .btn-download:hover { background: #00b368; transform: translateY(-2px); }
+        .btn-download { width: 100%; max-width: 450px; margin-top: 30px; padding: 22px; background: #000; color: #fff; border: none; border-radius: 18px; font-size: 18px; font-weight: 900; cursor: pointer; transition: 0.3s; }
+        .btn-download:hover { background: #333; transform: translateY(-3px); }
 
         .range-wrap { margin-bottom: 15px; }
         .range-header { display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 11px; font-weight: 800; color: #94a3b8; }
-        .range-val { color: var(--accent); font-size: 12px; }
-        input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+        .range-val { color: #333; font-size: 12px; }
+        input[type="range"] { width: 100%; accent-color: #333; cursor: pointer; }
 
         .color-group { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
         .color-input { width: 48px; height: 48px; padding: 3px; border: 2px solid var(--border); border-radius: 10px; cursor: pointer; }
@@ -82,45 +79,35 @@
 
 <aside class="sidebar">
     <div class="sidebar-header">
-        <h1>THUMBNAIL PRO 5.0</h1>
+        <h1>Thumbnail Maker Pro 6.0</h1>
     </div>
 
     <!-- 1. 텍스트 설정 -->
     <div class="config-section">
         <div class="config-title">텍스트 편집 및 정렬</div>
-        <textarea id="text-input">나눔스퀘어 네오&#10;5단계 굵기 조절&#10;완벽 지원 도구</textarea>
+        <textarea id="text-input">나눔스퀘어 네오&#10;형광 컬러 적용&#10;즉시 다운로드</textarea>
         <div class="align-group">
-            <button class="align-btn" data-align="left">
-                <svg viewBox="0 0 24 24"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/></svg>
-            </button>
-            <button class="align-btn active" data-align="center">
-                <svg viewBox="0 0 24 24"><path d="M7 15h10v-2H7v2zm-4 4h18v-2H3v2zm4-8h10V9H7v2zm-4-6v2h18V5H3z"/></svg>
-            </button>
-            <button class="align-btn" data-align="right">
-                <svg viewBox="0 0 24 24"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z" transform="scale(-1, 1) translate(-24, 0)"/></svg>
-            </button>
+            <button class="align-btn" data-align="left"><svg viewBox="0 0 24 24"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/></svg></button>
+            <button class="align-btn active" data-align="center"><svg viewBox="0 0 24 24"><path d="M7 15h10v-2H7v2zm-4 4h18v-2H3v2zm4-8h10V9H7v2zm-4-6v2h18V5H3z"/></svg></button>
+            <button class="align-btn" data-align="right"><svg viewBox="0 0 24 24"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z" transform="scale(-1, 1) translate(-24, 0)"/></svg></button>
         </div>
     </div>
 
     <!-- 2. 폰트 및 굵기 -->
     <div class="config-section">
         <div class="config-title">서체 상세 설정</div>
-        <div style="margin-bottom:15px;">
-            <label style="font-size:11px; font-weight:800; color:#94a3b8; display:block; margin-bottom:5px;">서체 선택</label>
-            <select id="font-family" class="select">
-                <option value="NanumSquareNeo">나눔스퀘어 네오 (조절 추천)</option>
-                <option value="Pretendard">프리텐다드 (조절 가능)</option>
-                <option value="TmonMonsori">티몬 몬소리 (단일 두께)</option>
-                <option value="GmarketSansBold">G마켓 산스 (단일 두께)</option>
-                <option value="Esamanru">이사만루 (단일 두께)</option>
-                <option value="Bagel Fat One">베이글 팻 (단일 두께)</option>
-            </select>
-        </div>
+        <select id="font-family" class="select" style="margin-bottom:15px;">
+            <option value="NanumSquareNeo" selected>나눔스퀘어 네오 (추천)</option>
+            <option value="Pretendard">프리텐다드</option>
+            <option value="TmonMonsori">티몬 몬소리</option>
+            <option value="GmarketSansBold">G마켓 산스</option>
+            <option value="Esamanru">이사만루</option>
+            <option value="Bagel Fat One">베이글 팻</option>
+        </select>
         
         <div class="range-wrap">
             <div class="range-header"><span>폰트 굵기 (Weight)</span><span class="range-val" id="fw-val">900</span></div>
             <input type="range" id="font-weight" min="100" max="900" step="100" value="900">
-            <p id="weight-notice" style="font-size:10px; color:#f43f5e; margin-top:5px; display:none;">* 현재 폰트는 굵기 조절을 지원하지 않습니다.</p>
         </div>
 
         <div class="control-row" style="margin-bottom:0;">
@@ -129,15 +116,27 @@
                 <input type="range" id="font-size" min="40" max="250" value="120">
             </div>
             <div class="range-wrap">
-                <div class="range-header"><span>테두리 두께</span><span class="range-val" id="bw-val">25px</span></div>
-                <input type="range" id="border-width" min="0" max="60" value="25">
+                <div class="range-header"><span>포인트 두께</span><span class="range-val" id="bw-val">25px</span></div>
+                <input type="range" id="border-width" min="0" max="100" value="25">
             </div>
         </div>
     </div>
 
-    <!-- 3. 테마 및 컬러 -->
+    <!-- 3. 컬러 팔레트 & 커스텀 -->
     <div class="config-section">
-        <div class="config-title">테마 및 컬러 커스텀</div>
+        <div class="config-title">형광 컬러 팔레트</div>
+        <div class="neon-palette">
+            <button class="neon-btn" style="background:#ede02a;" data-color="#ede02a"></button>
+            <button class="neon-btn" style="background:#00e676;" data-color="#00e676"></button>
+            <button class="neon-btn" style="background:#ff1744;" data-color="#ff1744"></button>
+            <button class="neon-btn" style="background:#ff9100;" data-color="#ff9100"></button>
+            <button class="neon-btn" style="background:#00e5ff;" data-color="#00e5ff"></button>
+            <button class="neon-btn" style="background:#e040fb;" data-color="#e040fb"></button>
+            <button class="neon-btn" style="background:#76ff03;" data-color="#76ff03"></button>
+            <button class="neon-btn" style="background:#ff4081;" data-color="#ff4081"></button>
+        </div>
+
+        <div class="config-title">커스텀 컬러 (HEX)</div>
         <select id="border-mode" class="select" style="margin-bottom:15px;">
             <option value="none">테두리 없음</option>
             <option value="all">4면 전체 테두리</option>
@@ -145,16 +144,19 @@
             <option value="top">상단 포인트 바</option>
         </select>
         <div class="color-group">
-            <input type="color" id="bg-picker" class="color-input" value="#ffffff">
-            <input type="text" id="bg-hex" class="hex-input" value="#ffffff">
+            <input type="color" id="bg-picker" class="color-input" value="#000000">
+            <input type="text" id="bg-hex" class="hex-input" value="#000000">
+            <label style="font-size:11px; font-weight:800;">배경</label>
         </div>
         <div class="color-group">
-            <input type="color" id="text-picker" class="color-input" value="#000000">
-            <input type="text" id="text-hex" class="hex-input" value="#000000">
+            <input type="color" id="text-picker" class="color-input" value="#ede02a">
+            <input type="text" id="text-hex" class="hex-input" value="#ede02a">
+            <label style="font-size:11px; font-weight:800;">글자</label>
         </div>
-        <div class="color-group" style="margin-bottom:0;">
-            <input type="color" id="point-picker" class="color-input" value="#00d179">
-            <input type="text" id="point-hex" class="hex-input" value="#00d179">
+        <div class="color-group">
+            <input type="color" id="point-picker" class="color-input" value="#ede02a">
+            <input type="text" id="point-hex" class="hex-input" value="#ede02a">
+            <label style="font-size:11px; font-weight:800;">포인트</label>
         </div>
     </div>
 
@@ -169,24 +171,23 @@
     <div class="preview-wrap">
         <canvas id="preview-canvas" width="1000" height="1000"></canvas>
     </div>
-    <button class="btn-download" onclick="download()">이미지 저장 (High-Res WebP)</button>
-</aside>
+    <button class="btn-download" id="download-btn">고화질 이미지 저장 (.webp)</button>
+</main>
 
 <script>
     const canvas = document.getElementById('preview-canvas');
     const ctx = canvas.getContext('2d');
 
     const presets = [
-        { name: '네이버 시그니처', bg: '#ffffff', text: '#000000', point: '#00d179' },
+        { name: '네온 옐로우', bg: '#000000', text: '#ede02a', point: '#ede02a' },
+        { name: '네이버 그린', bg: '#ffffff', text: '#000000', point: '#00d179' },
+        { name: '다크 그린', bg: '#0f172a', text: '#ffffff', point: '#22c55e' },
         { name: '유튜브 레드', bg: '#ffffff', text: '#000000', point: '#ff0000' },
-        { name: '다크 모드', bg: '#0f172a', text: '#ffffff', point: '#22c55e' },
         { name: '오렌지 톡', bg: '#ff9500', text: '#ffffff', point: '#ffffff' },
-        { name: '사이버 펑크', bg: '#000000', text: '#00f2ff', point: '#00f2ff' },
-        { name: '럭셔리 골드', bg: '#1a1a1a', text: '#d4af37', point: '#d4af37' }
+        { name: '사이버 펑크', bg: '#000000', text: '#00f2ff', point: '#00f2ff' }
     ];
 
     let currentAlign = 'center';
-    const variableFonts = ['NanumSquareNeo', 'Pretendard'];
 
     const elements = {
         text: document.getElementById('text-input'),
@@ -198,7 +199,6 @@
         bgP: document.getElementById('bg-picker'), bgH: document.getElementById('bg-hex'),
         txP: document.getElementById('text-picker'), txH: document.getElementById('text-hex'),
         ptP: document.getElementById('point-picker'), ptH: document.getElementById('point-hex'),
-        weightNotice: document.getElementById('weight-notice')
     };
 
     // 프리셋 생성
@@ -208,13 +208,26 @@
         div.innerHTML = `<div class="preset-box" style="background:${p.bg}; color:${p.text}; border-left:4px solid ${p.point}">가나다</div>
                          <div class="preset-label">${p.name}</div>`;
         div.onclick = () => {
-            elements.bgP.value = p.bg; elements.bgH.value = p.bg.toUpperCase();
-            elements.txP.value = p.text; elements.txH.value = p.text.toUpperCase();
-            elements.ptP.value = p.point; elements.ptH.value = p.point.toUpperCase();
+            updateAllColors(p.bg, p.text, p.point);
             draw();
         };
         document.getElementById('preset-grid').appendChild(div);
     });
+
+    // 형광 팔레트 이벤트
+    document.querySelectorAll('.neon-btn').forEach(btn => {
+        btn.onclick = () => {
+            const color = btn.dataset.color;
+            updateAllColors(elements.bgH.value, color, color);
+            draw();
+        };
+    });
+
+    function updateAllColors(bg, text, pt) {
+        elements.bgP.value = bg; elements.bgH.value = bg.toUpperCase();
+        elements.txP.value = text; elements.txH.value = text.toUpperCase();
+        elements.ptP.value = pt; elements.ptH.value = pt.toUpperCase();
+    }
 
     // 정렬 버튼
     document.querySelectorAll('.align-btn').forEach(btn => {
@@ -241,10 +254,6 @@
         const fw = elements.weight.value;
         const bw = parseInt(elements.borderWidth.value);
         const mode = elements.borderMode.value;
-        const fontName = elements.font.value;
-
-        // 조절 불가 폰트 알림
-        elements.weightNotice.style.display = variableFonts.includes(fontName) ? 'none' : 'block';
 
         // 수치 갱신
         document.getElementById('fs-val').innerText = fs + 'px';
@@ -255,7 +264,7 @@
         ctx.fillStyle = elements.bgH.value;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 테두리
+        // 테두리 포인트
         ctx.fillStyle = elements.ptH.value;
         if (mode === 'all') {
             ctx.strokeStyle = elements.ptH.value; ctx.lineWidth = bw * 2;
@@ -265,7 +274,7 @@
 
         // 텍스트 설정
         ctx.fillStyle = elements.txH.value;
-        ctx.font = `${fw} ${fs}px "${fontName}", sans-serif`;
+        ctx.font = `${fw} ${fs}px "${elements.font.value}", sans-serif`;
         ctx.textBaseline = 'middle';
 
         let x = canvas.width / 2;
@@ -287,6 +296,18 @@
             ctx.fillText(line, x, startY + (i * lh));
         });
     }
+
+    // 다운로드 로직 (강화됨)
+    document.getElementById('download-btn').onclick = function() {
+        const timestamp = new Date().getTime();
+        const dataUrl = canvas.toDataURL('image/webp', 0.95);
+        const link = document.createElement('a');
+        link.href = dataUrl;
+        link.download = `thumbnail_${timestamp}.webp`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
 
     ['text', 'font', 'weight', 'fontSize', 'borderMode', 'borderWidth'].forEach(k => {
         elements[k].oninput = draw;
