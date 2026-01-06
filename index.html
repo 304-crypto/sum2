@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thumbnail Master 10.0 - Full Edition</title>
+    <title>Thumbnail Master 11.0 - Image Opacity Edition</title>
     
     <!-- 폰트 로드 -->
     <link rel="stylesheet" type="text/css" href="https://hangeul.pstatic.net/hangeul_static/webfont/NanumSquareNeo/NanumSquareNeo.css">
@@ -23,7 +23,7 @@
         :root {
             --bg-main: #f1f5f9;
             --sidebar-bg: #ffffff;
-            --accent: #00d179;
+            --accent: #3b82f6;
             --border: #e2e8f0;
         }
 
@@ -49,12 +49,17 @@
 
         .select, .hex-input { width: 100%; height: 42px; padding: 0 10px; border: 2px solid var(--border); border-radius: 8px; font-size: 13px; font-weight: 700; background: #fff; }
 
-        /* 프리셋 20개 */
+        /* 사진 업로드 버튼 */
+        .file-label { display: block; width: 100%; padding: 12px; background: #f1f5f9; border: 2px dashed #cbd5e1; border-radius: 10px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 800; color: #64748b; transition: 0.2s; }
+        .file-label:hover { background: #e2e8f0; border-color: #94a3b8; }
+        #image-upload { display: none; }
+
+        /* 프리셋 그리드 */
         .preset-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
         .preset-card { border: 2px solid var(--border); border-radius: 6px; padding: 4px; cursor: pointer; text-align: center; transition: 0.2s; }
-        .preset-card:hover { border-color: #333; transform: scale(1.05); }
+        .preset-card:hover { border-color: #333; }
         .preset-box { width: 100%; height: 25px; border-radius: 4px; margin-bottom: 4px; }
-        .preset-label { font-size: 8px; font-weight: 800; color: #64748b; overflow: hidden; }
+        .preset-label { font-size: 8px; font-weight: 800; color: #64748b; }
 
         /* 메인 영역 */
         .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; justify-content: center; }
@@ -76,12 +81,13 @@
 
 <aside class="sidebar">
     <div class="sidebar-header">
-        <h1>Thumbnail Master 10.0</h1>
+        <h1>Thumbnail Master 11.0</h1>
     </div>
 
+    <!-- 1. 텍스트 설정 -->
     <div class="config-section">
         <div class="config-title">텍스트 편집 및 정렬</div>
-        <textarea id="text-input">나눔스퀘어 네오&#10;테두리 포인트 설정&#10;전체 텍스트 파일명</textarea>
+        <textarea id="text-input">나눔스퀘어 네오&#10;사진 업로드 기능&#10;불투명도 자유 조절</textarea>
         <div class="align-group">
             <button class="align-btn" data-align="left"><svg viewBox="0 0 24 24"><path d="M3 15h18v-2H3v2zm0 4h18v-2H3v2zm0-8h18V9H3v2zm0-6v2h18V5H3z"/></svg></button>
             <button class="align-btn active" data-align="center"><svg viewBox="0 0 24 24"><path d="M7 15h10v-2H7v2zm-4 4h18v-2H3v2zm4-8h10V9H7v2zm-4-6v2h18V5H3z"/></svg></button>
@@ -89,6 +95,22 @@
         </div>
     </div>
 
+    <!-- 2. 배경 이미지 설정 -->
+    <div class="config-section">
+        <div class="config-title">배경 사진 및 불투명도</div>
+        <label for="image-upload" class="file-label">📁 내 컴퓨터 사진 업로드</label>
+        <input type="file" id="image-upload" accept="image/*">
+        
+        <div style="margin-top:15px;">
+            <div class="range-wrap">
+                <div class="range-header"><span>사진 불투명도 (Opacity)</span><span class="range-val" id="opacity-val">100%</span></div>
+                <input type="range" id="image-opacity" min="0" max="100" value="100">
+            </div>
+        </div>
+        <button onclick="resetImage()" style="font-size:10px; border:none; background:none; color:#f43f5e; cursor:pointer; font-weight:800;">사진 삭제 후 배경색만 사용</button>
+    </div>
+
+    <!-- 3. 서체 설정 -->
     <div class="config-section">
         <div class="config-title">서체 상세 설정</div>
         <select id="font-family" class="select" style="margin-bottom:12px;">
@@ -113,7 +135,7 @@
         </div>
     </div>
 
-    <!-- 테두리 설정 부활 -->
+    <!-- 4. 테두리 및 프리셋 -->
     <div class="config-section">
         <div class="config-title">테두리 및 포인트 바</div>
         <select id="border-mode" class="select" style="margin-bottom:12px;">
@@ -129,21 +151,21 @@
     </div>
 
     <div class="config-section">
-        <div class="config-title">베스트 컬러 프리셋 (20종)</div>
+        <div class="config-title">컬러 프리셋 (20종)</div>
         <div class="preset-grid" id="preset-grid"></div>
     </div>
 
     <div class="config-section">
-        <div class="config-title">직접 색상 지정</div>
+        <div class="config-title">색상 직접 입력</div>
         <div class="color-group">
             <input type="color" id="bg-picker" class="color-input" value="#000000">
             <input type="text" id="bg-hex" class="hex-input" value="#000000">
-            <label>배경</label>
+            <label>배경색 (사진 투명 시 보임)</label>
         </div>
         <div class="color-group">
             <input type="color" id="text-picker" class="color-input" value="#ede02a">
             <input type="text" id="text-hex" class="hex-input" value="#ede02a">
-            <label>글자/포인트</label>
+            <label>글자/테두리 색상</label>
         </div>
     </div>
 </aside>
@@ -152,7 +174,7 @@
     <div class="preview-wrap">
         <canvas id="preview-canvas" width="1000" height="1000"></canvas>
     </div>
-    <button class="btn-download" id="download-btn">저용량 고화질 WebP 저장</button>
+    <button class="btn-download" id="download-btn">고화질 WebP 저장 (한글 파일명)</button>
 </main>
 
 <script>
@@ -173,12 +195,15 @@
     ];
 
     let currentAlign = 'center';
+    let bgImage = null;
+
     const el = {
         text: document.getElementById('text-input'), font: document.getElementById('font-family'),
         weight: document.getElementById('font-weight'), size: document.getElementById('font-size'),
         mode: document.getElementById('border-mode'), bWidth: document.getElementById('border-width'),
         bgP: document.getElementById('bg-picker'), bgH: document.getElementById('bg-hex'),
         txP: document.getElementById('text-picker'), txH: document.getElementById('text-hex'),
+        opacity: document.getElementById('image-opacity')
     };
 
     presets.forEach(p => {
@@ -193,6 +218,22 @@
         btn.onclick = () => { document.querySelectorAll('.align-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active'); currentAlign = btn.dataset.align; draw(); };
     });
 
+    // 사진 업로드 처리
+    document.getElementById('image-upload').onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const img = new Image();
+                img.onload = () => { bgImage = img; draw(); };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    function resetImage() { bgImage = null; document.getElementById('image-upload').value = ''; draw(); }
+
     const sync = (p, h) => {
         p.oninput = () => { h.value = p.value.toUpperCase(); draw(); };
         h.oninput = () => { if(/^#[0-9A-F]{6}$/i.test(h.value)) { p.value = h.value; draw(); }};
@@ -205,20 +246,49 @@
         const fw = el.weight.value;
         const bw = parseInt(el.bWidth.value);
         const mode = el.mode.value;
+        const op = parseInt(el.opacity.value) / 100;
 
         document.getElementById('fs-val').innerText = fs + 'px';
         document.getElementById('fw-val').innerText = fw;
         document.getElementById('bw-val').innerText = bw + 'px';
+        document.getElementById('opacity-val').innerText = el.opacity.value + '%';
 
+        // 1. 기본 배경색 칠하기
+        ctx.globalAlpha = 1.0;
         ctx.fillStyle = el.bgH.value;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+        // 2. 배경 사진 그리기 (불투명도 적용)
+        if (bgImage) {
+            ctx.globalAlpha = op;
+            // 이미지를 캔버스에 꽉 차게 그리기 (Cover 방식)
+            const canvasRatio = canvas.width / canvas.height;
+            const imgRatio = bgImage.width / bgImage.height;
+            let drawW, drawH, drawX, drawY;
+
+            if (imgRatio > canvasRatio) {
+                drawH = canvas.height;
+                drawW = canvas.height * imgRatio;
+                drawX = (canvas.width - drawW) / 2;
+                drawY = 0;
+            } else {
+                drawW = canvas.width;
+                drawH = canvas.width / imgRatio;
+                drawX = 0;
+                drawY = (canvas.height - drawH) / 2;
+            }
+            ctx.drawImage(bgImage, drawX, drawY, drawW, drawH);
+        }
+
+        ctx.globalAlpha = 1.0; // 투명도 복구
+
+        // 3. 테두리 및 포인트 바
         ctx.fillStyle = el.txH.value;
         if (mode === 'all') { ctx.strokeStyle = el.txH.value; ctx.lineWidth = bw * 2; ctx.strokeRect(0, 0, canvas.width, canvas.height); }
         else if (mode === 'left') { ctx.fillRect(0, 0, bw, canvas.height); }
         else if (mode === 'top') { ctx.fillRect(0, 0, canvas.width, bw); }
 
-        ctx.fillStyle = el.txH.value;
+        // 4. 텍스트 렌더링 (상하좌우 정중앙)
         ctx.font = `${fw} ${fs}px "${el.font.value}", sans-serif`;
         ctx.textBaseline = 'middle';
 
@@ -231,7 +301,12 @@
         const totalH = lines.length * lh;
         let startY = (canvas.height - totalH) / 2 + (lh / 2);
 
+        // 가독성을 위한 은은한 그림자
+        ctx.shadowColor = "rgba(0,0,0,0.3)";
+        ctx.shadowBlur = 10;
+
         lines.forEach((line, i) => { ctx.fillText(line, x, startY + (i * lh)); });
+        ctx.shadowBlur = 0; // 그림자 초기화
     }
 
     document.getElementById('download-btn').onclick = function() {
@@ -244,7 +319,7 @@
         document.body.appendChild(link); link.click(); document.body.removeChild(link);
     };
 
-    [el.text, el.font, el.weight, el.size, el.mode, el.bWidth].forEach(input => input.oninput = draw);
+    [el.text, el.font, el.weight, el.size, el.mode, el.bWidth, el.opacity].forEach(input => input.oninput = draw);
     document.fonts.ready.then(draw);
 </script>
 
